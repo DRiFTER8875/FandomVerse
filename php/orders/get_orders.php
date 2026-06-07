@@ -1,9 +1,4 @@
 <?php
-// ============================================================
-// FandomVerse — Get Orders Handler
-// Customers: own orders (filtered by session email)
-// Admins:    all orders
-// ============================================================
 session_start();
 header('Content-Type: application/json');
 require_once '../db.php';
@@ -21,8 +16,8 @@ if ($user['role'] === 'admin') {
          ORDER BY created_at DESC'
     );
 } else {
-    $email  = $user['email'];
-    $stmt   = $conn->prepare(
+    $email = $user['email'];
+    $stmt = $conn->prepare(
         'SELECT id, order_id AS orderId, customer_email AS email,
                 customer_name AS name, address, city,
                 items_json AS items, total, status,
@@ -40,7 +35,7 @@ $orders = [];
 while ($row = $result->fetch_assoc()) {
     $row['total'] = (float) $row['total'];
     $row['items'] = json_decode($row['items'], true);
-    $orders[]     = $row;
+    $orders[] = $row;
 }
 
 json_response(['success' => true, 'orders' => $orders]);

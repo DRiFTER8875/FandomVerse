@@ -1,7 +1,5 @@
 <?php
-// ============================================================
-// FandomVerse — Clear Cart (Logged-in user only)
-// ============================================================
+
 session_start();
 header('Content-Type: application/json');
 require_once '../db.php';

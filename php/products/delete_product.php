@@ -1,8 +1,4 @@
 <?php
-// ============================================================
-// FandomVerse — Delete Product (Admin only)
-// POST: id
-// ============================================================
 session_start();
 header('Content-Type: application/json');
 require_once '../db.php';

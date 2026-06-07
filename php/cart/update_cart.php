@@ -1,8 +1,4 @@
 <?php
-// ============================================================
-// FandomVerse — Update Cart (add / increment item)
-// POST: productId, quantity, size, material, delivery
-// ============================================================
 session_start();
 header('Content-Type: application/json');
 require_once '../db.php';
@@ -12,12 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     json_response(['success' => false, 'error' => 'Method not allowed.'], 405);
 }
 
-$userId    = $_SESSION['user']['id'];
+$userId = $_SESSION['user']['id'];
 $productId = trim($_POST['productId'] ?? '');
-$quantity  = max(1, (int) ($_POST['quantity'] ?? 1));
-$size      = trim($_POST['size']     ?? 'Standard');
-$material  = trim($_POST['material'] ?? 'Standard');
-$delivery  = trim($_POST['delivery'] ?? 'Standard Delivery');
+$quantity = max(1, (int) ($_POST['quantity'] ?? 1));
+$size = trim($_POST['size'] ?? 'Standard');
+$material = trim($_POST['material'] ?? 'Standard');
+$delivery = trim($_POST['delivery'] ?? 'Standard Delivery');
 
 if (empty($productId)) {
     json_response(['success' => false, 'error' => 'Product ID is required.']);
