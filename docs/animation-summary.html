@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FandomVerse – Animation System Documentation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --purple: #8A2BE2;
+      --pink:   #FF0055;
+      --dark:   #0d0d0d;
+      --mid:    #1a1a2e;
+      --light:  #e8e8f0;
+      --muted:  #9a9ab0;
+      --code-bg:#1e1e2e;
+      --radius: 10px;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f5fa;
+      color: #1a1a2e;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    /* ── Cover Page ────────────────────────────────────────────── */
+    .cover {
+      page-break-after: always;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 40%, #2d0a4e 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(138,43,226,0.25) 0%, transparent 70%);
+      top: -100px; left: -100px;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,0,85,0.15) 0%, transparent 70%);
+      bottom: -80px; right: -80px;
+    }
+    .cover-badge {
+      background: rgba(138,43,226,0.3);
+      border: 1px solid rgba(138,43,226,0.6);
+      color: #c084fc;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      position: relative; z-index: 1;
+    }
+    .cover h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      position: relative; z-index: 1;
+    }
+    .cover h1 span {
+      background: linear-gradient(135deg, #8A2BE2, #FF0055);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .cover-sub {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.55);
+      max-width: 560px;
+      margin-bottom: 3rem;
+      position: relative; z-index: 1;
+    }
+    .cover-meta {
+      display: flex;
+      gap: 2rem;
+      position: relative; z-index: 1;
+    }
+    .cover-meta-item {
+      text-align: center;
+    }
+    .cover-meta-item .label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 4px;
+    }
+    .cover-meta-item .value {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+    }
+    .cover-divider {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #8A2BE2, #FF0055);
+      border-radius: 2px;
+      margin: 2rem auto;
+    }
+
+    /* ── Content pages ─────────────────────────────────────────── */
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 3rem;
+    }
+
+    /* ── Section headings ──────────────────────────────────────── */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(138,43,226,0.12), rgba(255,0,85,0.08));
+      border: 1px solid rgba(138,43,226,0.25);
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin-bottom: 1.2rem;
+    }
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 1.5rem 0 0.5rem;
+    }
+    p { margin-bottom: 0.9rem; color: #3a3a5c; }
+
+    /* ── Divider ───────────────────────────────────────────────── */
+    .divider {
+      height: 2px;
+      background: linear-gradient(90deg, #8A2BE2 0%, #FF0055 50%, transparent 100%);
+      border-radius: 2px;
+      margin: 2.5rem 0;
+    }
+
+    /* ── Info cards ────────────────────────────────────────────── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #e0e0ef;
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(180deg, var(--purple), var(--pink));
+    }
+    .card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .card h4 {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #1a1a2e;
+      margin-bottom: 0.4rem;
+    }
+    .card p {
+      font-size: 0.82rem;
+      color: #6060a0;
+      margin: 0;
+    }
+
+    /* ── Code blocks ───────────────────────────────────────────── */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.5rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .code-block pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #cdd6f4;
+      white-space: pre;
+    }
+    .code-block .kw  { color: #cba6f7; } /* keyword */
+    .code-block .fn  { color: #89b4fa; } /* function */
+    .code-block .str { color: #a6e3a1; } /* string */
+    .code-block .cmt { color: #6c7086; font-style: italic; } /* comment */
+    .code-block .num { color: #fab387; } /* number */
+    .code-block .cls { color: #f38ba8; } /* class */
+
+    /* ── Tables ────────────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.2rem 0;
+      font-size: 13px;
+    }
+    thead tr {
+      background: linear-gradient(135deg, #8A2BE2, #c00040);
+      color: #fff;
+    }
+    thead th {
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+    tbody tr:nth-child(even) { background: #f5f5fa; }
+    tbody tr:nth-child(odd)  { background: #fff; }
+    tbody td {
+      padding: 9px 14px;
+      border-bottom: 1px solid #e8e8f0;
+      color: #3a3a5c;
+    }
+    tbody td:first-child {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--purple);
+      font-weight: 600;
+    }
+
+    /* ── Flow diagram ──────────────────────────────────────────── */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .flow-step {
+      background: linear-gradient(135deg, rgba(138,43,226,0.1), rgba(255,0,85,0.06));
+      border: 1px solid rgba(138,43,226,0.25);
+      border-radius: var(--radius);
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #4a0a8a;
+      white-space: nowrap;
+    }
+    .flow-arrow {
+      font-size: 1.2rem;
+      color: var(--purple);
+      padding: 0 8px;
+    }
+
+    /* ── Timeline ──────────────────────────────────────────────── */
+    .timeline { list-style: none; position: relative; padding-left: 28px; margin: 1rem 0; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--purple), var(--pink));
+      border-radius: 2px;
+    }
+    .timeline li {
+      position: relative;
+      margin-bottom: 0.9rem;
+      font-size: 13px;
+      color: #3a3a5c;
+    }
+    .timeline li::before {
+      content: '';
+      position: absolute;
+      left: -24px;
+      top: 6px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      border: 2px solid #f5f5fa;
+    }
+    .timeline li strong { color: #1a1a2e; }
+
+    /* ── Highlight box ─────────────────────────────────────────── */
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(138,43,226,0.08), rgba(255,0,85,0.05));
+      border: 1px solid rgba(138,43,226,0.2);
+      border-radius: var(--radius);
+      padding: 1rem 1.4rem;
+      margin: 1rem 0;
+    }
+    .highlight-box .title {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--purple);
+      margin-bottom: 6px;
+    }
+    .highlight-box p {
+      font-size: 13px;
+      margin: 0;
+    }
+
+    /* ── Badge ─────────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-right: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-purple { background: rgba(138,43,226,0.15); color: #8A2BE2; }
+    .badge-pink   { background: rgba(255,0,85,0.12);   color: #cc0044; }
+    .badge-green  { background: rgba(0,200,100,0.12);  color: #00a050; }
+    .badge-blue   { background: rgba(0,100,255,0.12);  color: #0055cc; }
+
+    /* ── Page break ────────────────────────────────────────────── */
+    .page-break { page-break-before: always; padding-top: 2rem; }
+
+    /* ── TOC ───────────────────────────────────────────────────── */
+    .toc { list-style: none; margin: 1rem 0; }
+    .toc li {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed #dde;
+      font-size: 13.5px;
+    }
+    .toc li .num {
+      font-weight: 700;
+      color: var(--purple);
+      width: 28px;
+      flex-shrink: 0;
+    }
+    .toc li .dots { flex: 1; border-bottom: 1px dotted #bbbbd0; margin: 0 10px; height: 0; align-self: center; }
+    .toc li .pg { color: var(--muted); font-size: 12px; font-weight: 600; }
+
+    /* ── Print ─────────────────────────────────────────────────── */
+    @media print {
+      body { background: #fff; font-size: 13px; }
+      .cover { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .card, .code-block, .highlight-box { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      thead tr { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  COVER PAGE                                                     -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-badge">Technical Documentation</div>
+  <h1>FandomVerse<br><span>Animation System</span></h1>
+  <p class="cover-sub">A complete reference for the scroll-driven, bidirectional animation system powering the FandomVerse storefront — including CSS transitions, typewriter effects, and reverse playback.</p>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="label">Project</div>
+      <div class="value">FandomVerse</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Version</div>
+      <div class="value">v1.3</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Date</div>
+      <div class="value">June 2026</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Pages</div>
+      <div class="value">Home · Explore · About</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  TABLE OF CONTENTS                                              -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-label">📋 Contents</div>
+  <h2>Table of Contents</h2>
+  <ul class="toc">
+    <li><span class="num">1</span>Overview<span class="dots"></span><span class="pg">3</span></li>
+    <li><span class="num">2</span>CSS Animation Classes<span class="dots"></span><span class="pg">3</span></li>
+    <li><span class="num">3</span>How the Scroll Engine Works<span class="dots"></span><span class="pg">4</span></li>
+    <li><span class="num">4</span>Typewriter Effect<span class="dots"></span><span class="pg">5</span></li>
+    <li><span class="num">5</span>Page-by-Page Animation Map<span class="dots"></span><span class="pg">6</span></li>
+    <li><span class="num">6</span>File Reference<span class="dots"></span><span class="pg">7</span></li>
+    <li><span class="num">7</span>How to Add Animations to New Elements<span class="dots"></span><span class="pg">8</span></li>
+  </ul>
+
+  <div class="divider"></div>
+
+  <!-- ─── 1. OVERVIEW ─────────────────────────────────────────── -->
+  <div class="section-label">01 — Overview</div>
+  <h2>What Is the Animation System?</h2>
+  <p>FandomVerse uses a <strong>scroll-driven, bidirectional animation system</strong> built entirely with vanilla CSS transitions and plain JavaScript — no external animation libraries required.</p>
+  <p>The core idea is simple: every animated element starts hidden or off-screen (via a CSS class), and a JavaScript scroll listener watches the viewport. When an element enters the visible area it becomes active and transitions into place. When it leaves, it transitions back out in the same direction it came from.</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h4>Zero Dependencies</h4>
+      <p>Pure CSS transitions + vanilla JS. No GSAP, Anime.js, or AOS required.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔁</div>
+      <h4>Truly Bidirectional</h4>
+      <p>Elements animate IN when scrolled into view and OUT in the same direction when scrolled away.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⌨️</div>
+      <h4>Typewriter Effect</h4>
+      <p>Text paragraphs type in character-by-character and delete themselves when the section leaves focus.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⏱️</div>
+      <h4>Configurable Duration</h4>
+      <p>Typing speed is set per-container via <code>data-typing-duration</code>, defaulting to 2 000 ms.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 2. CSS CLASSES ──────────────────────────────────────── -->
+  <div class="section-label">02 — CSS</div>
+  <h2>Animation Classes</h2>
+  <p>Each animation is defined as a pair of CSS rules in <strong>CSS/style.css</strong>. The base class sets the <em>hidden</em> starting state; adding <code>.animate-active</code> transitions the element into its <em>visible</em> final state.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Class Name</th>
+        <th>Direction</th>
+        <th>Effect (IN → active)</th>
+        <th>Effect when removed (OUT)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>.anim-slide-left</td>
+        <td>← Left</td>
+        <td>Slides in from the left</td>
+        <td>Slides back out to the left</td>
+      </tr>
+      <tr>
+        <td>.anim-slide-right</td>
+        <td>→ Right</td>
+        <td>Slides in from the right</td>
+        <td>Slides back out to the right</td>
+      </tr>
+      <tr>
+        <td>.anim-slide-up-zoom</td>
+        <td>↑ Bottom</td>
+        <td>Rises up + scales in from below</td>
+        <td>Sinks back down + scales out</td>
+      </tr>
+      <tr>
+        <td>.anim-zoom-in</td>
+        <td>● Center</td>
+        <td>Scales from 92% → 100%</td>
+        <td>Scales back to 92%</td>
+      </tr>
+      <tr>
+        <td>.anim-unblur</td>
+        <td>✦ Blur</td>
+        <td>Fades in from heavy blur</td>
+        <td>Blurs back out and fades</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box">
+    <div class="title">🔑 Key Principle</div>
+    <p>The <code>transition</code> property is declared on the <strong>base class</strong> (not on <code>.animate-active</code>). This means the transition applies in both directions — adding the class plays it forward, removing it plays it backward. No extra JavaScript is needed for the reverse motion of non-text elements.</p>
+  </div>
+
+  <h3>CSS Definition Example — Slide Left</h3>
+  <div class="code-block"><pre><span class="cmt">/* ── Initial (hidden) state ───────────────────── */</span>
+<span class="cls">.anim-slide-left</span> {
+  <span class="kw">opacity</span>: <span class="num">0</span>;
+  <span class="kw">transform</span>: <span class="fn">translateX</span>(<span class="num">-60px</span>);
+  <span class="kw">transition</span>: opacity <span class="num">0.8s</span> cubic-bezier(0.16, 1, 0.3, 1),
+              transform <span class="num">0.8s</span> cubic-bezier(0.16, 1, 0.3, 1);
+  <span class="kw">will-change</span>: opacity, transform;
+}
+
+<span class="cmt">/* ── Visible (active) state ───────────────────── */</span>
+<span class="cls">.anim-slide-left.animate-active</span> {
+  <span class="kw">opacity</span>: <span class="num">1</span>;
+  <span class="kw">transform</span>: <span class="fn">translateX</span>(<span class="num">0</span>);
+}</pre></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  PAGE 2                                                          -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+
+  <!-- ─── 3. SCROLL ENGINE ────────────────────────────────────── -->
+  <div class="section-label">03 — JavaScript Engine</div>
+  <h2>How the Scroll Engine Works</h2>
+  <p>Located in <strong>js/script.js</strong> inside the <code>initApp()</code> function. The engine uses a <code>scroll</code> event listener with <code>getBoundingClientRect()</code> for reliable, precise viewport detection — replacing the earlier <code>IntersectionObserver</code> approach which fired too late for smooth reverse animations.</p>
+
+  <h3>The "In Focus" Rule</h3>
+  <div class="code-block"><pre><span class="kw">function</span> <span class="fn">checkScrollAnimations</span>() {
+  <span class="kw">const</span> vh = window.innerHeight;
+
+  animEls.<span class="fn">forEach</span>(el =&gt; {
+    <span class="kw">const</span> r = el.<span class="fn">getBoundingClientRect</span>();
+
+    <span class="cmt">// "In focus" = top &lt; 85% of viewport AND bottom &gt; 15%</span>
+    <span class="kw">const</span> inFocus = r.top &lt; vh * <span class="num">0.85</span> &amp;&amp; r.bottom &gt; vh * <span class="num">0.15</span>;
+
+    <span class="kw">if</span> (inFocus &amp;&amp; !el.classList.<span class="fn">contains</span>(<span class="str">'animate-active'</span>)) {
+      el.classList.<span class="fn">add</span>(<span class="str">'animate-active'</span>);    <span class="cmt">// → CSS plays FORWARD</span>
+    }
+    <span class="kw">else if</span> (!inFocus &amp;&amp; el.classList.<span class="fn">contains</span>(<span class="str">'animate-active'</span>)) {
+      el.classList.<span class="fn">remove</span>(<span class="str">'animate-active'</span>); <span class="cmt">// → CSS plays BACKWARD</span>
+    }
+  });
+}
+
+window.<span class="fn">addEventListener</span>(<span class="str">'scroll'</span>, checkScrollAnimations, { passive: <span class="kw">true</span> });
+<span class="fn">requestAnimationFrame</span>(checkScrollAnimations); <span class="cmt">// run once on load</span></pre></div>
+
+  <h3>Why scroll event instead of IntersectionObserver?</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">🚫</div>
+      <h4>IntersectionObserver (Old)</h4>
+      <p>Fires once when an element crosses a threshold. For large elements (like sliders), it stays "intersecting" even when mostly scrolled past — so the reverse callback fires too late or not at all.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">✅</div>
+      <h4>Scroll + getBoundingClientRect (New)</h4>
+      <p>Runs on every scroll tick. Uses exact pixel positions to decide focus state — consistent and immediate in both scroll directions.</p>
+    </div>
+  </div>
+
+  <h3>Full Lifecycle Flow</h3>
+  <div class="flow">
+    <div class="flow-step">Page Loads</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Elements hidden by CSS base class</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">User scrolls down</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Element enters focus zone</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">+animate-active → CSS plays forward</div>
+  </div>
+  <div class="flow" style="margin-top: 0.5rem;">
+    <div class="flow-step">User scrolls back up</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Element leaves focus zone</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">−animate-active → CSS plays backward</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Element back to hidden state</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 4. TYPEWRITER ───────────────────────────────────────── -->
+  <div class="section-label">04 — Typewriter Effect</div>
+  <h2>Typewriter Animation</h2>
+  <p>The typewriter effect applies to any <code>&lt;p class="typewriter-text"&gt;</code> element that is a child of an <code>.anim-slide-left</code> or <code>.anim-slide-right</code> container.</p>
+
+  <h3>Initialisation (on page load)</h3>
+  <ul class="timeline">
+    <li>All <code>.typewriter-text</code> paragraphs have their text saved to <code>data-original-text</code>.</li>
+    <li>Their <code>innerText</code> is cleared and <code>visibility: hidden</code> is applied.</li>
+    <li>This ensures no text flashes before the animation runs.</li>
+  </ul>
+
+  <h3>Forward Animation (scrolling INTO view)</h3>
+  <ul class="timeline">
+    <li>Total duration is read from <code>data-typing-duration</code> attribute on the container (default: <strong>2 000 ms</strong>; About page uses <strong>2 500 ms</strong>).</li>
+    <li>Total character count across all paragraphs is summed.</li>
+    <li><strong>ms per character</strong> = <code>max(8, floor(totalDuration / totalChars))</code></li>
+    <li>Paragraphs are typed sequentially with a 60 ms gap between them.</li>
+    <li>A blinking cursor (<code>_</code>) appears via CSS <code>::after</code> while typing is active.</li>
+  </ul>
+
+  <h3>Reverse Animation (scrolling OUT of view)</h3>
+  <ul class="timeline">
+    <li>Any running forward intervals are immediately cancelled via the <code>activeTypewriters</code> Map.</li>
+    <li>Paragraphs are processed in reverse order (last → first) to mirror the forward sequence.</li>
+    <li>Characters are deleted one-by-one at ~<strong>700 ms total</strong> deletion speed.</li>
+    <li>Each paragraph is hidden after its text is fully deleted.</li>
+    <li>When the section scrolls into view again, the typewriter restarts from scratch.</li>
+  </ul>
+
+  <div class="code-block"><pre><span class="cmt">/* Blinking cursor CSS */</span>
+<span class="cls">.typing-active::after</span> {
+  <span class="kw">content</span>: <span class="str">'_'</span>;
+  <span class="kw">display</span>: inline-block;
+  <span class="kw">color</span>: <span class="kw">var</span>(--primary-color);
+  <span class="kw">animation</span>: blink-cursor <span class="num">0.75s</span> step-end infinite;
+}
+<span class="cls">@keyframes</span> blink-cursor {
+  from, to { opacity: <span class="num">0</span> }
+  <span class="num">50%</span>       { opacity: <span class="num">1</span> }
+}</pre></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  PAGE 3                                                          -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+
+  <!-- ─── 5. PAGE MAP ─────────────────────────────────────────── -->
+  <div class="section-label">05 — Page Map</div>
+  <h2>Page-by-Page Animation Map</h2>
+
+  <h3>🏠 Home Page (index.html)</h3>
+  <table>
+    <thead><tr><th>Element</th><th>Animation Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td>.about-text</td><td>.anim-slide-left</td><td>Slides in from the left</td></tr>
+      <tr><td>.about-text h2</td><td>.anim-unblur</td><td>Un-blurs "Quality Uncompromised"</td></tr>
+      <tr><td>.about-text p (×2)</td><td>.typewriter-text</td><td>Types in over 2 000 ms, deletes on exit</td></tr>
+      <tr><td>.about-image</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>h2 "Most Popular"</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>.slider-wrapper (×2)</td><td>.anim-slide-up-zoom</td><td>Zooms up 0.15 s after title</td></tr>
+      <tr><td>h2 "New Arrivals"</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>h2 "Contact Us"</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>.contact-image-wrapper</td><td>.anim-slide-left</td><td>Slides in from the left</td></tr>
+      <tr><td>.contact-form-container</td><td>.anim-slide-right</td><td>Slides in from the right</td></tr>
+    </tbody>
+  </table>
+
+  <h3>🔍 Explore Page (Explore.html)</h3>
+  <table>
+    <thead><tr><th>Element</th><th>Animation Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td>h2 "New Arrivals"</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>.category-slider-wrapper ×1</td><td>.anim-slide-up-zoom</td><td>Zooms up 0.12 s after title</td></tr>
+      <tr><td>h2 "Anime"</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>.category-slider-wrapper ×2</td><td>.anim-slide-up-zoom</td><td>Zooms up 0.12 s after title</td></tr>
+      <tr><td>h2 "Games"</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>.category-slider-wrapper ×3</td><td>.anim-slide-up-zoom</td><td>Zooms up 0.12 s after title</td></tr>
+      <tr><td>h2 "Cartoon"</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>.category-slider-wrapper ×4</td><td>.anim-slide-up-zoom</td><td>Zooms up 0.12 s after title</td></tr>
+      <tr><td>h2 "Movies &amp; TV Shows"</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>.category-slider-wrapper ×5</td><td>.anim-slide-up-zoom</td><td>Zooms up 0.12 s after title</td></tr>
+    </tbody>
+  </table>
+
+  <h3>ℹ️ About Us Page (about.html)</h3>
+  <table>
+    <thead><tr><th>Element</th><th>Animation Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td>h1 "About FandomVerse"</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>Section 1 — .about-text</td><td>.anim-slide-left</td><td>Slides in from the left</td></tr>
+      <tr><td>Section 1 — h2 "Our Mission"</td><td>.anim-unblur</td><td>Un-blurs on entry</td></tr>
+      <tr><td>Section 1 — p (×2)</td><td>.typewriter-text</td><td>Types in over 2 500 ms, deletes on exit</td></tr>
+      <tr><td>Section 1 — .about-image</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+      <tr><td>Section 2 — .about-text</td><td>.anim-slide-right</td><td>Slides in from the right</td></tr>
+      <tr><td>Section 2 — h2 "Quality Uncompromised"</td><td>.anim-unblur</td><td>Un-blurs on entry</td></tr>
+      <tr><td>Section 2 — p (×2)</td><td>.typewriter-text</td><td>Types in over 2 500 ms, deletes on exit</td></tr>
+      <tr><td>Section 2 — .about-image</td><td>.anim-slide-up-zoom</td><td>Zooms up from below</td></tr>
+    </tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <!-- ─── 6. FILE REFERENCE ───────────────────────────────────── -->
+  <div class="section-label">06 — Files</div>
+  <h2>File Reference</h2>
+  <table>
+    <thead><tr><th>File</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td>CSS/style.css</td><td>All animation class definitions (lines ~1000–1075). Contains base states, active states, transitions, and the blink-cursor keyframe.</td></tr>
+      <tr><td>js/script.js</td><td>The <code>initApp()</code> function hosts the scroll engine, <code>checkScrollAnimations()</code>, <code>typewriterForward()</code>, and <code>typewriterReverse()</code>.</td></tr>
+      <tr><td>index.html</td><td>Home page. Animation classes applied directly in HTML markup.</td></tr>
+      <tr><td>Explore.html</td><td>Explore page. Animation classes on section headings and slider wrappers.</td></tr>
+      <tr><td>about.html</td><td>About page. Two alternating sections (left/right) with typewriter paragraphs and <code>data-typing-duration="2500"</code>.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  PAGE 4                                                          -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+
+  <!-- ─── 7. HOW TO ADD ──────────────────────────────────────── -->
+  <div class="section-label">07 — Extending</div>
+  <h2>How to Add Animations to New Elements</h2>
+  <p>The system is designed to be self-contained. Adding an animation to any new element requires only HTML changes — no JavaScript needed.</p>
+
+  <h3>Step 1 — Add the animation class to the element in HTML</h3>
+  <div class="code-block"><pre><span class="cmt">&lt;!-- Zoom in from bottom --&gt;</span>
+&lt;<span class="fn">div</span> class=<span class="str">"my-section anim-slide-up-zoom"</span>&gt; ... &lt;/<span class="fn">div</span>&gt;
+
+<span class="cmt">&lt;!-- Slide in from left --&gt;</span>
+&lt;<span class="fn">div</span> class=<span class="str">"my-box anim-slide-left"</span>&gt; ... &lt;/<span class="fn">div</span>&gt;
+
+<span class="cmt">&lt;!-- Slide in from right --&gt;</span>
+&lt;<span class="fn">div</span> class=<span class="str">"my-box anim-slide-right"</span>&gt; ... &lt;/<span class="fn">div</span>&gt;
+
+<span class="cmt">&lt;!-- Un-blur fade-in (good for headings) --&gt;</span>
+&lt;<span class="fn">h2</span> class=<span class="str">"anim-unblur"</span>&gt;Heading Text&lt;/<span class="fn">h2</span>&gt;</pre></div>
+
+  <p>The scroll engine automatically picks up all elements matching those class selectors.</p>
+
+  <h3>Step 2 — Add a stagger delay (optional)</h3>
+  <div class="code-block"><pre><span class="cmt">&lt;!-- Title animates first, content follows 150 ms later --&gt;</span>
+&lt;<span class="fn">h2</span> class=<span class="str">"anim-slide-up-zoom"</span>&gt;Section Title&lt;/<span class="fn">h2</span>&gt;
+&lt;<span class="fn">div</span> class=<span class="str">"anim-slide-up-zoom"</span> style=<span class="str">"transition-delay: 0.15s"</span>&gt;
+  ...content...
+&lt;/<span class="fn">div</span>&gt;</pre></div>
+
+  <h3>Step 3 — Add a typewriter effect (text paragraphs)</h3>
+  <div class="code-block"><pre><span class="cmt">&lt;!-- Container must be anim-slide-left or anim-slide-right --&gt;</span>
+&lt;<span class="fn">div</span> class=<span class="str">"anim-slide-left"</span> data-typing-duration=<span class="str">"2000"</span>&gt;
+  &lt;<span class="fn">h2</span> class=<span class="str">"anim-unblur"</span>&gt;Section Heading&lt;/<span class="fn">h2</span>&gt;
+  &lt;<span class="fn">p</span> class=<span class="str">"typewriter-text"</span>&gt;First paragraph text...&lt;/<span class="fn">p</span>&gt;
+  &lt;<span class="fn">p</span> class=<span class="str">"typewriter-text"</span>&gt;Second paragraph text...&lt;/<span class="fn">p</span>&gt;
+&lt;/<span class="fn">div</span>&gt;</pre></div>
+
+  <div class="highlight-box">
+    <div class="title">⚠️ Important Notes</div>
+    <p>
+      • <code>data-typing-duration</code> is in <strong>milliseconds</strong>. Omitting it defaults to 2 000 ms.<br>
+      • The h2 with <code>.anim-unblur</code> is observed independently — it doesn't need to be inside the slide container to animate, but placing it inside means it resets automatically when the container leaves focus.<br>
+      • <code>transition-delay</code> only affects the CSS transition direction. The scroll engine checks focus based on <code>getBoundingClientRect()</code> without any delay.
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">Summary</div>
+  <h2>Quick Reference</h2>
+  <div class="card-grid">
+    <div class="card">
+      <h4>Zoom up from bottom</h4>
+      <p><span class="badge badge-purple">.anim-slide-up-zoom</span></p>
+    </div>
+    <div class="card">
+      <h4>Slide in from left</h4>
+      <p><span class="badge badge-purple">.anim-slide-left</span></p>
+    </div>
+    <div class="card">
+      <h4>Slide in from right</h4>
+      <p><span class="badge badge-purple">.anim-slide-right</span></p>
+    </div>
+    <div class="card">
+      <h4>Scale zoom in</h4>
+      <p><span class="badge badge-purple">.anim-zoom-in</span></p>
+    </div>
+    <div class="card">
+      <h4>Blur fade in</h4>
+      <p><span class="badge badge-purple">.anim-unblur</span></p>
+    </div>
+    <div class="card">
+      <h4>Typewriter text</h4>
+      <p><span class="badge badge-pink">.typewriter-text</span> inside <span class="badge badge-purple">.anim-slide-left</span> or <span class="badge badge-purple">.anim-slide-right</span></p>
+    </div>
+    <div class="card">
+      <h4>Custom typing speed</h4>
+      <p><span class="badge badge-green">data-typing-duration="2500"</span> on the container</p>
+    </div>
+    <div class="card">
+      <h4>Stagger delay</h4>
+      <p><span class="badge badge-blue">style="transition-delay: 0.15s"</span> on the element</p>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top: 3rem; color: #9a9ab0; font-size: 12px;">
+    FandomVerse Animation System Documentation · v1.3 · June 2026<br>
+    Generated by Antigravity IDE
+  </div>
+</div>
+
+</body>
+</html>
