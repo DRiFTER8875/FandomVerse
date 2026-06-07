@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FandomVerse | Signup</title>
+    <link rel="stylesheet" href="CSS/signupstyle.css">
+</head>
+
+<body>
+
+    <div class="signup-container">
+        <h1>FandomVerse | Signup</h1>
+
+
+        <form id="signupForm">
+
+            <div class="input-group">
+                <input type="text" id="firstName"
+                placeholder="First Name" required>
+            </div>
+
+                <div class="input-group">
+                    <input type="text" id="lastName"
+                    placeholder="Last Name" required>
+                </div>
+
+            <div class="input-group">
+                <input type="text" id="username"
+                placeholder="Username" required>
+                <small id="usernameError" class="error-msg"></small>
+            </div>
+
+             <div class="input-group">
+                <input type="email" id="email"
+                placeholder="Email" required>
+                <small id="emailError" class="error-msg"></small>
+             </div>
+
+             <div class="input-group">
+                <input type="password" id="password"
+                placeholder="Password" required>
+                <small id="passwordError" class="error-msg"></small>
+             </div>
+
+             <div class="input-group">
+                <input type="password" id="confirmPassword"
+                placeholder="Confirm Password" required>
+                <small id="confirmPasswordError" class="error-msg"></small>
+             </div>
+
+             <div class="input-group">
+                <input type="text" id="address"
+                placeholder="Address" required>
+             </div>
+
+             <div class="input-group">
+                <select id="province" required>
+                    <option value="" disabled selected>Select Province
+                    </option>
+                    <option value="Western">Western Province</option>
+                    <option value="Central">Central Province</option>
+                    <option value="Southern">Southern Province</option>
+                    <option value="Uva">Uva Province</option>
+                    <option value="Sabaragamuwa">Sabaragamuwa Province</option>
+                    <option value="North Western">North Western Province</option>
+                    <option value="North Central">North Central Province</option>
+                    <option value="Eastern">Eastern Province</option>
+                    <option value="Northern">Northern Province</option>
+                </select>
+             </div>
+
+             <div class="input-group">
+                <input type="text" id="city"
+                placeholder="City" required>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="postalcode"
+                placeholder="Postal Code" required>
+            </div>
+
+             <div class="input-group">
+                <input type="text" id="phone"
+                placeholder="Phone Number" required>
+                <small id="phoneError" class="error-msg"></small>
+
+
+            </div>
+
+            <button type="button" id="signupBtn">Signup</button>
+            <button type="button" id="backBtn">Already have an account? Login</button>
+        </form>
+
+    </div>
+    <script src="js/signup.js"></script>
+</body>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Models & Merch - FandomVerse</title>
+    <meta name="description" content="Browse our entire catalog of items.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="glass">
+        <a href="index.html" class="logo">FandomVerse</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="explore.html" class="active">Explore</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+        <div class="nav-icons">
+            <span id="nav-admin-link" style="display:none;"><a href="admin.html">Admin Portal</a></span>
+            <span id="nav-auth-link"><a href="login.html">Log In</a></span>
+            <a href="cart.html" style="position:relative;">
+                🛒 <span id="cart-count" style="display:none;">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container" style="max-width: 100%; padding: 2rem 0;">
+        <div class="explore-header" style="margin-bottom: 2rem;">
+            <h1 class="page-title"><span class="highlight">Explore</span> All Merchandise</h1>
+        </div>
+
+        <div class="category-section">
+            <h2 class="section-title" style="text-align: left; padding-left: 5%; font-size: 2rem;">New Arrivals</h2>
+            <div class="category-slider-wrapper">
+                <button class="slider-btn prev" onclick="slideSlider('slider-new-arrivals', -1)">&#10094;</button>
+                <div class="category-slider" id="slider-new-arrivals" style="padding: 1rem 5%;">
+                    <!-- Dynamically injected products -->
+                </div>
+                <button class="slider-btn next" onclick="slideSlider('slider-new-arrivals', 1)">&#10095;</button>
+            </div>
+        </div>
+
+        <div class="category-section">
+            <h2 class="section-title" style="text-align: left; padding-left: 5%; font-size: 2rem;">Anime</h2>
+            <div class="category-slider-wrapper">
+                <button class="slider-btn prev" onclick="slideSlider('slider-anime', -1)">&#10094;</button>
+                <div class="category-slider" id="slider-anime" style="padding: 1rem 5%;">
+                    <!-- Dynamically injected products -->
+                </div>
+                <button class="slider-btn next" onclick="slideSlider('slider-anime', 1)">&#10095;</button>
+            </div>
+        </div>
+
+        <div class="category-section">
+            <h2 class="section-title" style="text-align: left; padding-left: 5%; font-size: 2rem;">Games</h2>
+            <div class="category-slider-wrapper">
+                <button class="slider-btn prev" onclick="slideSlider('slider-games', -1)">&#10094;</button>
+                <div class="category-slider" id="slider-games" style="padding: 1rem 5%;">
+                    <!-- Dynamically injected products -->
+                </div>
+                <button class="slider-btn next" onclick="slideSlider('slider-games', 1)">&#10095;</button>
+            </div>
+        </div>
+
+        <div class="category-section">
+            <h2 class="section-title" style="text-align: left; padding-left: 5%; font-size: 2rem;">Cartoon</h2>
+            <div class="category-slider-wrapper">
+                <button class="slider-btn prev" onclick="slideSlider('slider-cartoon', -1)">&#10094;</button>
+                <div class="category-slider" id="slider-cartoon" style="padding: 1rem 5%;">
+                    <!-- Dynamically injected products -->
+                </div>
+                <button class="slider-btn next" onclick="slideSlider('slider-cartoon', 1)">&#10095;</button>
+            </div>
+        </div>
+
+        <div class="category-section">
+            <h2 class="section-title" style="text-align: left; padding-left: 5%; font-size: 2rem;">Movies & TV Shows
+            </h2>
+            <div class="category-slider-wrapper">
+                <button class="slider-btn prev" onclick="slideSlider('slider-movies', -1)">&#10094;</button>
+                <div class="category-slider" id="slider-movies" style="padding: 1rem 5%;">
+                    <!-- Dynamically injected products -->
+                </div>
+                <button class="slider-btn next" onclick="slideSlider('slider-movies', 1)">&#10095;</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 FandomVerse. All Rights Reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/explore_sliders.js"></script>
+</body>
+
+</html>

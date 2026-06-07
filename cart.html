@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | FandomVerse</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="CSS/explorestyle.css">
+</head>
+
+<body>
+    <header class="glass">
+        <a href="index.html" class="logo">FandomVerse</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="Explore.html">Explore</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+        <div class="nav-icons">
+            <span id="nav-auth-link"><a href="login.html">Log In</a></span>
+            <a href="cart.html" style="position:relative;" class="active">
+                🛒 <span id="cart-count" style="display:none;">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container" style="flex: 1; padding: 40px 20px;">
+        <h1 style="text-align: center; margin-bottom: 40px; font-size: 3rem;">Your <span class="highlight">Cart</span>
+        </h1>
+
+        <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+
+            <!-- Cart Items Display -->
+            <div id="cart-items-wrapper" style="flex: 2; min-width: 300px;">
+                <div id="empty-cart-message" style="text-align: center; padding: 40px;" class="glass">
+                    <h2>Your cart is currently empty.</h2>
+                    <p style="color: #aaa; margin-top: 15px;">Looks like you haven't added anything to your cart yet.
+                    </p>
+                    <a href="Explore.html" class="btn btn-primary" style="margin-top: 25px;">Start Shopping</a>
+                </div>
+
+                <div id="cart-items-container">
+                    <!-- Populated by cart.js -->
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div id="order-summary" class="glass"
+                style="flex: 1; min-width: 300px; padding: 25px; position: sticky; top: 100px;">
+                <h2 style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                    Order Summary</h2>
+
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span style="color: #aaa;">Subtotal</span>
+                    <span id="cart-subtotal" style="font-weight: bold;">LKR 0.00</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span style="color: #aaa;">Estimated Shipping</span>
+                    <span id="cart-shipping" style="font-weight: bold;">LKR 0.00</span>
+                </div>
+
+                <div
+                    style="display: flex; justify-content: space-between; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 1.2rem;">
+                    <strong>Total</strong>
+                    <strong id="cart-total" style="color: #6a5cff;">LKR 0.00</strong>
+                </div>
+
+                <button onclick="window.location.href='checkout.html'" class="btn btn-primary"
+                    style="width: 100%; margin-top: 30px; font-size: 1.1rem; padding: 15px;">
+                    Proceed to Checkout
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer style="margin-top: auto;">
+        <p>&copy; 2026 FandomVerse. All Rights Reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+
+</html>

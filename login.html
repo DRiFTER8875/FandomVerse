@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FandomVerse | Login & Signup</title>
+    <link rel="stylesheet" href="CSS/loginstyle.css">
+</head>
+
+<body>
+
+    <img src="RSC/IMGS/posters.png" alt="Background" class="bg-static-image">
+
+    <div class="overlay"></div>
+
+    <div class="main-login-wrapper">
+        
+        <div class="left-side-slider">
+            <img src="RSC/IMGS/login_anime.png" class="side-slide active" alt="Slide 1">
+            <img src="RSC/IMGS/login_movies.png" class="side-slide" alt="Slide 2">
+            <img src="RSC/IMGS/login_games.png" class="side-slide" alt="Slide 3">
+            <div class="slider-overlay"></div>
+        </div>
+
+        <div class="right-side-form">
+            
+            <div id="loginContainer">
+                <h1>FandomVerse | Login</h1>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <input type="text" id="loginUsername" placeholder="Username" required>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                    </div>
+
+                    <button type="button" id="loginBtn">Login</button>
+                    <button type="button" id="googleBtn" class="social-btn">Continue with Google</button>
+
+                    <div class="divider">
+                        <span>OR</span>
+                    </div>
+
+                    <button type="button" id="guestBtn" class="guest-btn">Explore as guest</button>
+
+                    <p class="toggle-text">Don't have an account? <a href="#" id="showSignup">Sign up here</a></p>
+                </form>
+            </div>
+
+            <div id="signupContainer" style="display: none;">
+                <h1>FandomVerse | Signup</h1>
+                <form id="signupForm">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <input type="text" id="firstName" placeholder="First Name" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="lastName" placeholder="Last Name" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" id="regUsername" placeholder="Username" required>
+                        <small id="usernameError" class="error-msg"></small>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder="Email" required>
+                        <small id="emailError" class="error-msg"></small>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="regPassword" placeholder="Password" required>
+                        <small id="passwordError" class="error-msg"></small>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                        <small id="confirmPasswordError" class="error-msg"></small>
+                    </div>
+
+                    <button type="button" id="signupBtn">Create Account</button>
+
+                    <p class="toggle-text">Already have an account? <a href="#" id="showLogin">Log in here</a></p>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/loginscript.js"></script>
+</body>
+</html>

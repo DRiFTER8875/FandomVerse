@@ -1,0 +1,323 @@
+/* --- GLOBAL RESET & FONTS --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --primary-color: #8A2BE2;
+    --primary-hover: #9b4dff;
+    --secondary-color: #FF0055;
+    --bg-dark: #111;
+    --panel-bg: rgba(17, 17, 17, 0.6);
+    --border-color: #444;
+    --text-light: #fff;
+    --text-muted: #aaa;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    overflow: hidden;
+}
+
+/* --- BACKGROUND IMAGE (Match Login) --- */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.1) 0%, rgba(255, 0, 85, 0.1) 100%);
+    z-index: -2;
+}
+
+/* Overlay removed since background is now a gradient */
+
+/* --- SIDEBAR --- */
+.sidebar {
+    width: 260px;
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.1) 0%, rgba(255, 0, 85, 0.1) 100%);
+    backdrop-filter: blur(10px);
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.sidebar h2 {
+    margin-bottom: 40px;
+    color: #9787c1;
+    font-weight: 700;
+}
+
+.sidebar h2 span {
+    font-size: 0.6em;
+    color: var(--text-muted);
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: var(--text-muted);
+    padding: 12px 20px;
+    margin-bottom: 15px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: 0.3s;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+    border-color: transparent;
+}
+
+.logout-btn {
+    margin-top: auto;
+    background: transparent !important;
+    border: 1px solid #555 !important;
+    color: #ccc !important;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    box-shadow: none !important;
+    border-color: #777 !important;
+}
+
+/* --- MAIN CONTENT --- */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.header {
+    background: var(--panel-bg);
+    backdrop-filter: blur(10px);
+    padding: 20px 30px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header h3 {
+    color: #9787c1;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: bold;
+    color: var(--text-light);
+}
+
+.admin-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+/* --- MANAGE ITEMS FORM & CONTAINER --- */
+.manage-items-container {
+    background: var(--panel-bg);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.manage-items-container h3 {
+    color: #9787c1;
+    margin-bottom: 20px;
+}
+
+.add-item-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+/* Inputs & Selects */
+input,
+select {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+input::placeholder {
+    color: #888;
+}
+
+input:focus,
+select:focus {
+    border-color: #6b5b95;
+    box-shadow: 0 0 5px rgba(107, 91, 149, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+select option {
+    background: var(--bg-dark);
+    color: var(--text-light);
+}
+
+/* Checkbox Style */
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    color: var(--text-light);
+}
+
+.checkbox-wrapper input {
+    flex: 0;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+#addItemBtn {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+#addItemBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+}
+
+/* TABLE STYLING */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 10px;
+}
+
+th,
+td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+th {
+    background: rgba(255, 255, 255, 0.05);
+    color: #9787c1;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+th:first-child {
+    border-top-left-radius: 10px;
+}
+
+th:last-child {
+    border-top-right-radius: 10px;
+}
+
+td {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.remove-btn {
+    background: transparent;
+    color: #ff4d4d;
+    border: 1px solid #ff4d4d;
+    padding: 6px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.remove-btn:hover {
+    background: rgba(255, 77, 77, 0.1);
+    box-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+}
+
+/* Badges for Limited Edition */
+.badge-yes {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(138, 43, 226, 0.3);
+}
+
+.badge-no {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 5px 12px;
+    border-radius: 15px;
+}

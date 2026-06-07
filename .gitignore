@@ -1,0 +1,10 @@
+# Ignore Word documents and project proposals
+*.docx
+
+# Ignore backup zip files
+*.zip
+
+# Ignore Windows system files (optional but recommended)
+Thumbs.db
+
+*.tmp

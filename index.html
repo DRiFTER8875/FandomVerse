@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FandomVerse - Your Ultimate Merch Destination</title>
+    <meta name="description" content="Shop the best anime, gaming, and movie merchandise at FandomVerse.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="glass">
+        <a href="index.html" class="logo">FandomVerse</a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="explore.html">Explore</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+        <div class="nav-icons">
+            <span id="nav-admin-link" style="display:none;"><a href="admin.html">Admin Portal</a></span>
+            <span id="nav-auth-link"><a href="login.html">Log In</a></span>
+            <a href="cart.html" style="position:relative;">
+                🛒 <span id="cart-count" style="display:none;">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-slideshow" id="hero-slider">
+                <img src="rsc/imgs/SSD.png" alt="ssd" class="hero-slide active">
+                <img src="rsc/imgs/figures.png" alt="figures" class="hero-slide">
+                <img src="rsc/imgs/gekko.jpg" alt="gekko" class="hero-slide">
+                <img src="rsc/imgs/poseters.png" alt="poseters" class="hero-slide">
+                <img src="rsc/imgs/animes.png" alt="animes" class="hero-slide">
+                <img src="rsc/imgs/NFS.png" alt="nfs" class="hero-slide">
+            </div>
+
+            <div class="hero-content">
+                <h1>Step Into Your <span class="highlight">Universe</span></h1>
+                <p>Exclusive merchandise from your favorite Anime, Games, Movies, and TV Shows. Discover high-quality
+                    figures, posters, and more.</p>
+                <div class="hero-btns">
+                    <a href="explore.html" class="btn btn-primary">Start Exploring</a>
+                </div>
+            </div>
+            <div class="hero-overlay"></div>
+        </section>
+        <div class="about-section highlight-bg">
+            <div class="about-text">
+                <h2>Quality Uncompromised</h2>
+                <p>Every piece of our collection is curated with absolute perfection in mind. We know the details matter
+                    – from the paint job on a 1/7 scale figure to the vibrant print quality of our posters.</p>
+                <p>It's not just merch. It's an extension of the worlds you love, brought right into your living room.
+                </p>
+            </div>
+            <div class="about-image glass">
+                <img src="rsc/imgs/action figures.png" alt="Cinematic Set">
+            </div>
+        </div>
+
+        <section class="slider-section">
+            <h2 class="section-title">Most Popular</h2>
+            <div class="slider-wrapper">
+                <div class="slider-track" id="popular-track">
+                    <div class="product-card glass" style="cursor: pointer;"
+                        onclick="window.location.href='product_detail.html?id=prod_43'">
+                        <div class="product-image-wrapper">
+                            <div class="product-badge">Best Seller</div>
+                            <img src="rsc/imgs/Figure.jpg" alt="figure" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Anime</span>
+                            <h3 class="product-title">My DressUp Darling - Marin</h3>
+                            <div class="product-price">LKR 4,500.00</div>
+                            <button class="add-to-cart-btn"
+                                onclick="event.stopPropagation(); store.addToCart('prod_43'); alert('Added to cart!')">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card glass" style="cursor: pointer;"
+                        onclick="window.location.href='product_detail.html?id=prod_44'">
+                        <div class="product-image-wrapper">
+                            <div class="product-badge">New</div>
+                            <img src="rsc/imgs/luffy.png" alt="One Piece Poster - Monkey D. Luffy" class="product-image"
+                                loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Anime</span>
+                            <h3 class="product-title">One Piece Poster - Monkey D. Luffy</h3>
+                            <div class="product-price">LKR 2,199.00</div>
+                            <button class="add-to-cart-btn"
+                                onclick="event.stopPropagation(); store.addToCart('prod_44'); alert('Added to cart!')">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card glass" style="cursor: pointer;"
+                        onclick="window.location.href='product_detail.html?id=prod_45'">
+                        <div class="product-image-wrapper">
+                            <div class="product-badge">Best Seller</div>
+                            <img src="rsc/imgs/Arthur rdr.png" alt="Arthur rdr" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Games</span>
+                            <h3 class="product-title">RDR2 - Arthur Morgan</h3>
+                            <div class="product-price">LKR 3,800.00</div>
+                            <button class="add-to-cart-btn"
+                                onclick="event.stopPropagation(); store.addToCart('prod_45'); alert('Added to cart!')">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card glass" style="cursor: pointer;"
+                        onclick="window.location.href='product_detail.html?id=prod_46'">
+                        <div class="product-image-wrapper">
+                            <div class="product-badge">Hot</div>
+                            <img src="rsc/imgs/MERCH.jpg" alt="merch" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Movies & TV Shows</span>
+                            <h3 class="product-title">The Boys T-Shirt</h3>
+                            <div class="product-price">LKR 2,450.00</div>
+                            <button class="add-to-cart-btn"
+                                onclick="event.stopPropagation(); store.addToCart('prod_46'); alert('Added to cart!')">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card glass" style="cursor: pointer;"
+                        onclick="window.location.href='product_detail.html?id=prod_47'">
+                        <div class="product-image-wrapper">
+                            <img src="rsc/imgs/Ghost.png" alt="ghost" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Games</span>
+                            <h3 class="product-title">Call of Duty - Ghost</h3>
+                            <div class="product-price">LKR 2,750.00</div>
+                            <button class="add-to-cart-btn"
+                                onclick="event.stopPropagation(); store.addToCart('prod_47'); alert('Added to cart!')">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card glass" style="cursor: pointer;"
+                        onclick="window.location.href='product_detail.html?id=prod_48'">
+                        <div class="product-image-wrapper">
+                            <div class="product-badge">Best Seller</div>
+                            <img src="rsc/imgs/jinxFigure.png" alt="jinxFigure" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Movies & TV Shows</span>
+                            <h3 class="product-title">Arcane - Jinx Figure</h3>
+                            <div class="product-price">LKR 4,999.00</div>
+                            <button class="add-to-cart-btn"
+                                onclick="event.stopPropagation(); store.addToCart('prod_48'); alert('Added to cart!')">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card glass" style="cursor: pointer;"
+                        onclick="window.location.href='product_detail.html?id=prod_39'">
+                        <div class="product-image-wrapper">
+                            <div class="product-badge">New</div>
+                            <img src="rsc/imgs/Super man.png" alt="superman" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Movies & TV Shows</span>
+                            <h3 class="product-title">Superman Poster</h3>
+                            <div class="product-price">LKR 2,100.00</div>
+                            <button class="add-to-cart-btn"
+                                onclick="event.stopPropagation(); store.addToCart('prod_39'); alert('Added to cart!')">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card glass" style="cursor: pointer;"
+                        onclick="window.location.href='product_detail.html?id=prod_49'">
+                        <div class="product-image-wrapper">
+                            <div class="product-badge">Best Seller</div>
+                            <img src="https://images.unsplash.com/photo-1605114841961-da286d9a9235?w=600&h=800&fit=crop&q=80"
+                                alt="League of Legends Jinx Action Figure" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Games</span>
+                            <h3 class="product-title">League of Legends Jinx Action Figure</h3>
+                            <div class="product-price">LKR 4,200.00</div>
+                            <button class="add-to-cart-btn"
+                                onclick="event.stopPropagation(); store.addToCart('prod_49'); alert('Added to cart!')">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card glass" style="cursor: pointer;"
+                        onclick="window.location.href='product_detail.html?id=prod_50'">
+                        <div class="product-image-wrapper">
+                            <div class="product-badge">Hot</div>
+                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=800&fit=crop&q=80"
+                                alt="Call of Duty: Ghost Skull Premium T-Shirt" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Games</span>
+                            <h3 class="product-title">Call of Duty: Ghost Skull Premium T-Shirt</h3>
+                            <div class="product-price">LKR 2,950.00</div>
+                            <button class="add-to-cart-btn"
+                                onclick="event.stopPropagation(); store.addToCart('prod_50'); alert('Added to cart!')">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card glass" style="cursor: pointer;"
+                        onclick="window.location.href='product_detail.html?id=prod_51'">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=600&h=800&fit=crop&q=80"
+                                alt="Spider-Man Vintage Comic Poster" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Movies</span>
+                            <h3 class="product-title">Spider-Man Vintage Comic Poster</h3>
+                            <div class="product-price">LKR 3,500.00</div>
+                            <button class="add-to-cart-btn"
+                                onclick="event.stopPropagation(); store.addToCart('prod_51'); alert('Added to cart!')">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slider-section">
+            <h2 class="section-title">New Arrivals</h2>
+            <div class="slider-wrapper">
+                <div class="slider-track" id="new-arrivals-track">
+                    <!-- Dynamically injected products -->
+                </div>
+            </div>
+        </section>
+
+        <section class="container contact-section" id="contact">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-layout">
+                <div class="contact-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=800&q=80"
+                        alt="Fandomverse Merchandise Collection on Display" loading="lazy">
+                </div>
+                <div class="contact-form-container glass">
+                    <form id="contact-form"
+                        onsubmit="event.preventDefault(); alert('Message sent successfully!'); this.reset();">
+                        <div class="form-group">
+                            <label for="contact-name">Name</label>
+                            <input type="text" id="contact-name" class="form-control" required placeholder="Your Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email">Email</label>
+                            <input type="email" id="contact-email" class="form-control" required
+                                placeholder="your.email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-message">Message</label>
+                            <textarea id="contact-message" class="form-control" rows="5" required
+                                placeholder="How can we help you?"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+                </div>
+            </div>
+        </section>
+
+        <section class="container contact-section" id="contact">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-layout">
+                <div class="contact-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=800&q=80"
+                        alt="Fandomverse Merchandise Collection on Display" loading="lazy">
+                </div>
+                <div class="contact-form-container glass">
+                    <form id="contact-form"
+                        onsubmit="event.preventDefault(); alert('Message sent successfully!'); this.reset();">
+                        <div class="form-group">
+                            <label for="contact-name">Name</label>
+                            <input type="text" id="contact-name" class="form-control" required placeholder="Your Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email">Email</label>
+                            <input type="email" id="contact-email" class="form-control" required
+                                placeholder="your.email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-message">Message</label>
+                            <textarea id="contact-message" class="form-control" rows="5" required
+                                placeholder="How can we help you?"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                    </form>
+    <footer>
+        <p>&copy; 2026 FandomVerse. All Rights Reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+.gallery-viewport {
+  display: flex;
+  gap: 30px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  transition: transform 0.5s ease;
+}
+
+.image-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out; /* Smooth sliding effect */
+  gap: 30px;
+  height: 500px;
+  width: 800px;
+  border-radius: 10px;
+}
+
+.image-track img {
+  width: 500px;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  transition: transform 0.3s;
+}

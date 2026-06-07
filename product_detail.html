@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+
+<body style="background-color: var(--bg-color);">
+
+    <nav class="navbar" style="padding: 1rem 5%;">
+        <div class="navleft">
+            <a href="javascript:history.back()" class="btn btn-outline" style="font-size: 1rem; border-color: rgba(255,255,255,0.2);">←
+                Back</a>
+        </div>
+    </nav>
+
+    <div class="container"
+        style="margin-top: 50px; display: flex; flex-wrap: wrap; gap: 30px; align-items: flex-start;">
+
+        <div class="detail-image glass"
+            style="flex: 1; min-width: 300px; padding: 20px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.05);">
+            <img id="detailImg" src="" alt="Product Image"
+                style="max-width: 100%; max-height: 500px; object-fit: contain; border-radius: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));">
+        </div>
+
+        <div class="detail-info glass" style="flex: 1; min-width: 300px; padding: 30px;">
+            <h1 id="detailTitle" style="font-size: 3rem; color: #fff;">Loading...</h1>
+            <h3 id="detailCategory"
+                style="color: var(--primary-color); margin-top: 10px; text-transform: uppercase; letter-spacing: 1px;">
+                Category</h3>
+            <h2 id="detailPrice" style="color: #fff; font-size: 2.5rem; margin: 20px 0; font-weight: 800;">LKR 0.00</h2>
+
+            <p id="detailDesc" style="line-height: 1.6; color: var(--text-muted);">
+                This is a limited edition item from the FandomVerse collection.
+                High quality material and authentic design.
+            </p>
+
+            <div class="product-options" style="margin-top: 25px;">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="productSize"
+                        style="color: var(--text-muted); font-weight: bold; display: block; margin-bottom: 5px;">Size /
+                        Scale</label>
+                    <select id="productSize" class="form-control">
+                        <option value="S">Small / 1:12 Scale</option>
+                        <option value="M" selected>Medium / 1:8 Scale</option>
+                        <option value="L">Large / 1:6 Scale</option>
+                        <option value="XL">Extra Large / 1:4 Scale</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="productMaterial"
+                        style="color: var(--text-muted); font-weight: bold; display: block; margin-bottom: 5px;">Material
+                        /
+                        Finish</label>
+                    <select id="productMaterial" class="form-control">
+                        <option value="Standard" selected>Standard Base / PVC</option>
+                        <option value="Premium">Premium Base / Resin</option>
+                        <option value="Matte">Matte Finish (Posters)</option>
+                        <option value="Glossy">Glossy Finish (Posters)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 25px;">
+                    <label for="productDelivery"
+                        style="color: var(--text-muted); font-weight: bold; display: block; margin-bottom: 5px;">Fulfillment
+                        Options</label>
+                    <select id="productDelivery" class="form-control">
+                        <option value="Standard Delivery" selected>Standard Delivery (3-5 Days)</option>
+                        <option value="Express Delivery">Express Delivery (1-2 Days)</option>
+                        <option value="Store Pickup">Store Pickup (Available Now)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <button id="addToCartBtn" style="
+                    flex: 1;
+                    padding: 15px;
+                    background: linear-gradient(45deg, #8A2BE2, #FF0055);
+                    color: white;
+                    border: none;
+                    border-radius: 30px;
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: transform 0.2s;
+                    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);">
+                    Add to Cart
+                </button>
+                <button id="buyNowBtn" style="
+                    flex: 1;
+                    padding: 15px;
+                    background: #333;
+                    color: white;
+                    border: none;
+                    border-radius: 30px;
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: transform 0.2s;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);">
+                    Buy Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/product_detail.js"></script>
+</body>
+
+</html>

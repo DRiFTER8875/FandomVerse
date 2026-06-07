@@ -1,0 +1,204 @@
+/* --- GLOBAL RESET --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #111; /* Dark theme for explore page */
+  color: white;
+}
+
+/* --- FIXED WHITE NAVBAR (COPIED FROM STYLE.CSS) --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 40px;
+    background-color: white; 
+    position: sticky; 
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.navleft {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.logo {
+    height: 70px;
+    cursor: pointer;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+.navitem {
+    position: relative;
+}
+
+nav a {
+    text-decoration: none;
+    color: black;
+    margin-right: 20px;
+    font-weight: bold; /* Bold Letters */
+    font-size: 15px;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #6a5cff;
+}
+
+.dropdown {
+    position: absolute;
+    top: 120%;
+    left: 0;
+    border-radius: 12px;
+    padding: 10px 0;
+    min-width: 220px;
+    background-color: white; /* Solid White */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.25s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 99;
+}
+
+.navitem:hover .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown a {
+    display: block;
+    padding: 12px 20px;
+    color: black;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.dropdown a:hover {
+    background: rgba(108, 92, 231, 0.15);
+}
+
+.navright {
+    padding: 8px 12px;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: white;
+}
+
+.navright input {
+    padding: 8px 12px;
+    border: none;
+    outline: none;
+    color: #333;
+}
+
+.navicons {
+    height: 22px;
+    cursor: pointer;
+}
+
+/* --- MAIN CONTENT --- */
+main {
+  padding: 30px;
+}
+
+.category {
+  margin-bottom: 50px;
+}
+
+/* Flexbox to align Title and Button */
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.category h2 {
+  margin: 0;
+  color: white;
+}
+
+/* "Show All" Button Style */
+.toggle-btn {
+    background-color: #6a5cff;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.toggle-btn:hover {
+    background-color: white;
+    color: black;
+}
+
+/* Grid Layout */
+.image-grid {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap; /* Allows items to wrap when "Show All" is clicked */
+  justify-content: center;
+}
+
+.explore-link {
+    display: block;
+    text-decoration: none;
+}
+
+.box {
+  width: 200px;
+  height: 300px;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: transform 0.3s ease;
+}
+
+.box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  transition: transform 0.3s;
+}
+
+.box:hover {
+    transform: scale(1.05);
+}
+
+/* Animation for adding items */
+.slide-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

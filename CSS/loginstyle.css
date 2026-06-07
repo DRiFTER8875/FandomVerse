@@ -1,0 +1,228 @@
+/* --- GLOBAL RESET --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #111; 
+}
+
+/* --- 1. STATIC BACKGROUND IMAGE --- */
+.bg-static-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    filter: blur(15px) brightness(0.5); 
+    transform: scale(1.1); 
+}
+
+.overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+}
+
+/* --- 2. MAIN SPLIT WRAPPER --- */
+:root {
+    --primary-color: #8A2BE2;
+    --primary-hover: #9b4dff;
+    --secondary-color: #FF0055;
+}
+
+.main-login-wrapper {
+    display: flex; 
+    width: 900px; 
+    max-width: 95vw; 
+    min-height: 620px; /* Increased to fit the signup form */
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.1) 0%, rgba(255, 0, 85, 0.1) 100%);
+    border-radius: 20px; 
+    overflow: hidden; 
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5); 
+    backdrop-filter: blur(10px);
+    z-index: 1;
+}
+
+/* --- LEFT SIDE: SLIDER --- */
+.left-side-slider {
+    flex: 1; 
+    position: relative;
+    overflow: hidden;
+}
+
+.side-slide {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover; 
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.side-slide.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.slider-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.4));
+    z-index: 2;
+}
+
+/* --- RIGHT SIDE: FORM --- */
+.right-side-form {
+    flex: 1; 
+    padding: 3rem; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    text-align: center;
+    background: rgba(17, 17, 17, 0.6);
+}
+
+h1 {
+    color: #9787c1;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.input-row {
+    display: flex;
+    gap: 10px;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #444;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    outline: none;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+input:focus {
+    border-color: #6b5b95;
+    box-shadow: 0 0 5px rgba(107, 91, 149, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- BUTTONS --- */
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+#loginBtn, #signupBtn {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+}
+
+#loginBtn:hover, #signupBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+}
+
+.social-btn {
+    background: white;
+    color: #333;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.social-btn::before {
+    content: "G"; /* Simple placeholder for Google Icon */
+    font-weight: bold;
+    color: #4285F4;
+    font-size: 1.2rem;
+}
+
+.social-btn:hover {
+    background: #f1f1f1;
+}
+
+.guest-btn {
+    background: transparent;
+    color: #ccc;
+    border: 1px solid #555;
+}
+
+.guest-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* --- DIVIDER & TEXT --- */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: #777;
+}
+
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #444;
+}
+
+.divider span {
+    padding: 0 10px;
+    font-size: 0.85rem;
+}
+
+.toggle-text {
+    margin-top: 1.5rem;
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.toggle-text a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.toggle-text a:hover {
+    text-decoration: underline;
+    color: var(--primary-hover);
+}
+
+.error-msg {
+    color: #ff4d4d;
+    font-size: 0.85rem;
+    display: none;
+    margin-top: 5px;
+    text-align: left;
+    padding-left: 10px;
+}
