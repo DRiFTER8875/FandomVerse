@@ -1,7 +1,4 @@
 <?php
-// ============================================================
-// FandomVerse — Database Connection
-// ============================================================
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
@@ -19,7 +16,8 @@ if ($conn->connect_error) {
 $conn->set_charset('utf8mb4');
 
 // Helper: send JSON response and exit
-function json_response($data, $status = 200) {
+function json_response($data, $status = 200)
+{
     http_response_code($status);
     header('Content-Type: application/json');
     echo json_encode($data);
@@ -27,16 +25,20 @@ function json_response($data, $status = 200) {
 }
 
 // Helper: require admin session
-function require_admin() {
-    if (session_status() === PHP_SESSION_NONE) session_start();
+function require_admin()
+{
+    if (session_status() === PHP_SESSION_NONE)
+        session_start();
     if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
         json_response(['success' => false, 'error' => 'Unauthorized. Admin access required.'], 403);
     }
 }
 
 // Helper: require any logged-in user
-function require_login() {
-    if (session_status() === PHP_SESSION_NONE) session_start();
+function require_login()
+{
+    if (session_status() === PHP_SESSION_NONE)
+        session_start();
     if (!isset($_SESSION['user'])) {
         json_response(['success' => false, 'error' => 'Unauthorized. Please log in.'], 401);
     }

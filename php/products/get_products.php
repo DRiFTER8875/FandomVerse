@@ -1,8 +1,4 @@
 <?php
-// ============================================================
-// FandomVerse — Get All Products
-// GET (public, no auth required)
-// ============================================================
 header('Content-Type: application/json');
 require_once '../db.php';
 
@@ -22,12 +18,12 @@ if (!$result) {
 $products = [];
 while ($row = $result->fetch_assoc()) {
     // Cast types to match what JS expects
-    $row['price']     = (float) $row['price'];
-    $row['isLimited'] = (bool)  $row['isLimited'];
-    $row['isPopular'] = (bool)  $row['isPopular'];
-    $row['stock']     = (int)   $row['stock'];
-    $row['dateAdded'] = (int)   $row['dateAdded'];
-    $products[]       = $row;
+    $row['price'] = (float) $row['price'];
+    $row['isLimited'] = (bool) $row['isLimited'];
+    $row['isPopular'] = (bool) $row['isPopular'];
+    $row['stock'] = (int) $row['stock'];
+    $row['dateAdded'] = (int) $row['dateAdded'];
+    $products[] = $row;
 }
 
 json_response(['success' => true, 'products' => $products]);

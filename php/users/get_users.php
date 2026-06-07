@@ -1,7 +1,4 @@
 <?php
-// ============================================================
-// FandomVerse — Get All Users (Admin only)
-// ============================================================
 session_start();
 header('Content-Type: application/json');
 require_once '../db.php';

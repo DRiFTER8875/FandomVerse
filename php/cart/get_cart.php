@@ -1,7 +1,4 @@
 <?php
-// ============================================================
-// FandomVerse — Get Cart (Logged-in user only)
-// ============================================================
 session_start();
 header('Content-Type: application/json');
 require_once '../db.php';
@@ -22,9 +19,9 @@ $result = $stmt->get_result();
 
 $items = [];
 while ($row = $result->fetch_assoc()) {
-    $row['price']    = (float) $row['price'];
-    $row['quantity'] = (int)   $row['quantity'];
-    $items[]         = $row;
+    $row['price'] = (float) $row['price'];
+    $row['quantity'] = (int) $row['quantity'];
+    $items[] = $row;
 }
 
 json_response(['success' => true, 'cart' => $items]);
