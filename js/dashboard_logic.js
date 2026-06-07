@@ -1,285 +1,345 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. SETUP: Load existing data ---
-    // We run this immediately so the table shows items you added previously
-    loadTableFromStorage();
+    // --- 1. SETUP: Load existing data from DB ---
+    loadTableFromDB();
 
-    // --- SETUP ADMIN NAME ---
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser && currentUser.name) {
-        const adminNameElement = document.getElementById('displayAdminName');
-        if (adminNameElement) {
-            adminNameElement.innerText = "Admin " + currentUser.name;
-        }
-    }
+    // --- SETUP ADMIN NAME from session ---
+    fetch('php/auth/check_session.php')
+        .then(r => r.json())
+        .then(data => {
+            if (data.loggedIn && data.user) {
+                const adminNameEl = document.getElementById('displayAdminName');
+                if (adminNameEl) adminNameEl.innerText = 'Admin ' + data.user.name;
+                // Also update localStorage for other pages
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
+            } else {
+                // Not an admin session — redirect to login
+                alert('Admin access required. Please log in.');
+                window.location.href = 'login.html';
+            }
+        })
+        .catch(() => {
+            // Fallback: check localStorage (file:// mode)
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser && currentUser.name) {
+                const adminNameEl = document.getElementById('displayAdminName');
+                if (adminNameEl) adminNameEl.innerText = 'Admin ' + currentUser.name;
+            }
+        });
 
     // --- LOAD ACTUAL USERS ---
-    loadUsersFromStorage();
+    loadUsersFromDB();
 
     // --- TAB SWITCHING LOGIC ---
-    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    const sidebarLinks    = document.querySelectorAll('.sidebar-link');
     const contentSections = document.querySelectorAll('.content-section');
 
     sidebarLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-
-            // Remove active class from all links
             sidebarLinks.forEach(l => l.classList.remove('active'));
-            // Add active class to clicked link
             link.classList.add('active');
-
-            // Hide all sections
             contentSections.forEach(section => section.style.display = 'none');
-
-            // Show target section
-            const targetId = link.getAttribute('data-target');
-            const targetSection = document.getElementById(targetId);
-            if (targetSection) {
-                targetSection.style.display = 'block';
-            }
+            const targetSection = document.getElementById(link.getAttribute('data-target'));
+            if (targetSection) targetSection.style.display = 'block';
         });
     });
 
-    // --- 2. "ADD ITEM" BUTTON LOGIC ---
+    // --- "ADD / UPDATE ITEM" BUTTON LOGIC ---
     const addItemBtn = document.getElementById('addItemBtn');
 
-    // Only run this if the button actually exists on the page
     if (addItemBtn) {
-        addItemBtn.addEventListener('click', function () {
+        addItemBtn.addEventListener('click', async function () {
 
-            // A. Grab all the text the user typed
-            const id = document.getElementById('itemId').value;
-            const name = document.getElementById('itemName').value;
-            const price = document.getElementById('itemPrice').value;
-            const category = document.getElementById('itemCategory').value;
+            const id          = document.getElementById('itemId').value.trim();
+            const name        = document.getElementById('itemName').value.trim();
+            const price       = document.getElementById('itemPrice').value.trim();
+            const category    = document.getElementById('itemCategory').value;
             const subCategory = document.getElementById('itemSubCategory').value;
-            const keywords = document.getElementById('itemKeywords').value;
-            const isLimited = document.getElementById('itemLimited').checked;
-            const isPopular = document.getElementById('itemPopular').checked;
-            const image = document.getElementById('itemImage').value;
-            const editIndex = parseInt(document.getElementById('editIndexInput').value);
+            const keywords    = document.getElementById('itemKeywords').value.trim();
+            const isLimited   = document.getElementById('itemLimited').checked;
+            const isPopular   = document.getElementById('itemPopular').checked;
+            const image       = document.getElementById('itemImage').value.trim();
+            const editId    = document.getElementById('editIndexInput').value.trim();
+            const isEditing = editId !== '' && editId !== '-1';
 
-            // B. validation: Stop if important fields are empty
             if (!id || !name || !price || !image || !category || !subCategory || !keywords) {
-                alert("Please fill in all details, including Categories and Keywords.");
+                alert('Please fill in all details, including Categories and Keywords.');
                 return;
             }
 
-            const productData = { id, name, price, category, subCategory, keywords, isLimited, isPopular, image, dateAdded: Date.now() };
+            addItemBtn.disabled    = true;
+            addItemBtn.textContent = isEditing ? 'Updating...' : 'Adding...';
 
-            if (editIndex >= 0) {
-                // --- UPDATE MODE ---
-                const products = JSON.parse(localStorage.getItem('fandomProducts')) || [];
-                products[editIndex] = productData;
-                localStorage.setItem('fandomProducts', JSON.stringify(products));
-                alert("Item Updated Successfully!");
-            } else {
-                // --- ADD MODE ---
-                saveProductToStorage(productData);
-                alert("Item Added and Saved!");
+            const formData = new FormData();
+            formData.append('id',          isEditing ? editId : id);
+            formData.append('name',        name);
+            formData.append('price',       price);
+            formData.append('category',    category);
+            formData.append('subCategory', subCategory);
+            formData.append('keywords',    keywords);
+            formData.append('isLimited',   isLimited ? 'true' : 'false');
+            formData.append('isPopular',   isPopular ? 'true' : 'false');
+            formData.append('image',       image);
+            formData.append('stock',       15);
+
+            const endpoint = isEditing
+                ? 'php/products/update_product.php'
+                : 'php/products/add_product.php';
+
+            try {
+                const res  = await fetch(endpoint, { method: 'POST', body: formData });
+                const data = await res.json();
+
+                if (data.success) {
+                    alert(isEditing ? 'Item Updated Successfully!' : 'Item Added and Saved!');
+                    loadTableFromDB();
+                    clearInputs();
+                    addItemBtn.textContent = 'Add Item to Store';
+                    addItemBtn.style.background = '';
+                    document.getElementById('editIndexInput').value = '';
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error.'));
+                }
+            } catch (err) {
+                console.error('Add/update product error:', err);
+                alert('Connection error. Make sure XAMPP is running.');
+            } finally {
+                addItemBtn.disabled = false;
+                addItemBtn.textContent = isEditing ? 'Update Item' : 'Add Item to Store';
             }
-
-            loadTableFromStorage();
-            clearInputs();
-
-            // Reset button
-            addItemBtn.textContent = 'Add Item to Store';
-            addItemBtn.style.background = '';
-            document.getElementById('editIndexInput').value = '-1';
         });
     }
 
-    // --- 3. BULK DELETE LOGIC ---
+    // --- BULK DELETE LOGIC ---
     const selectAllCheckbox = document.getElementById('selectAllItems');
-    const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+    const bulkDeleteBtn     = document.getElementById('bulkDeleteBtn');
 
     if (selectAllCheckbox) {
         selectAllCheckbox.addEventListener('change', function () {
-            const checkboxes = document.querySelectorAll('.itemCheckbox');
-            checkboxes.forEach(cb => cb.checked = this.checked);
+            document.querySelectorAll('.itemCheckbox').forEach(cb => cb.checked = this.checked);
             toggleBulkDeleteBtn();
         });
     }
 
     if (bulkDeleteBtn) {
-        bulkDeleteBtn.addEventListener('click', function () {
+        bulkDeleteBtn.addEventListener('click', async function () {
             const checkboxes = document.querySelectorAll('.itemCheckbox:checked');
             if (checkboxes.length === 0) return;
 
-            if (confirm(`Are you sure you want to permanently delete these ${checkboxes.length} selected items?`)) {
-                
-                // Get indices to delete, sorting descending to avoid index shifting when splicing
-                const indicesToDelete = Array.from(checkboxes)
-                    .map(cb => parseInt(cb.value))
-                    .sort((a, b) => b - a);
+            if (!confirm(`Are you sure you want to permanently delete these ${checkboxes.length} selected items?`)) return;
 
-                const products = JSON.parse(localStorage.getItem('fandomProducts')) || [];
-                
-                indicesToDelete.forEach(index => {
-                    products.splice(index, 1);
-                });
+            const productIds = Array.from(checkboxes).map(cb => cb.value);
 
-                localStorage.setItem('fandomProducts', JSON.stringify(products));
-                
-                // Uncheck master box
+            // Delete each one via PHP
+            const deletePromises = productIds.map(pid => {
+                const fd = new FormData();
+                fd.append('id', pid);
+                return fetch('php/products/delete_product.php', { method: 'POST', body: fd })
+                    .then(r => r.json());
+            });
+
+            try {
+                await Promise.all(deletePromises);
                 if (selectAllCheckbox) selectAllCheckbox.checked = false;
                 toggleBulkDeleteBtn();
-                loadTableFromStorage();
+                loadTableFromDB();
+            } catch (err) {
+                console.error('Bulk delete error:', err);
+                alert('Some items may not have been deleted. Please refresh.');
             }
         });
     }
 });
 
+// --- TOGGLE BULK DELETE BUTTON ---
 function toggleBulkDeleteBtn() {
     const checkedCount = document.querySelectorAll('.itemCheckbox:checked').length;
-    const bulkBtn = document.getElementById('bulkDeleteBtn');
-    if (bulkBtn) {
-        bulkBtn.style.display = checkedCount > 0 ? 'inline-block' : 'none';
+    const bulkBtn      = document.getElementById('bulkDeleteBtn');
+    if (bulkBtn) bulkBtn.style.display = checkedCount > 0 ? 'inline-block' : 'none';
+}
+
+// --- LOAD PRODUCTS FROM DB INTO TABLE ---
+async function loadTableFromDB() {
+    const tableBody = document.getElementById('itemsTableBody');
+    if (!tableBody) return;
+    tableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;">Loading...</td></tr>';
+
+    try {
+        const res  = await fetch('php/products/get_products.php');
+        const data = await res.json();
+
+        if (!data.success) {
+            tableBody.innerHTML = `<tr><td colspan="9" style="color:red;">${data.error}</td></tr>`;
+            return;
+        }
+
+        const products = data.products;
+        // Mirror to localStorage for other JS pages
+        localStorage.setItem('fandomProducts', JSON.stringify(products));
+
+        tableBody.innerHTML = '';
+        if (products.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;">No products found.</td></tr>';
+            return;
+        }
+
+        products.forEach((product, index) => {
+            const row   = document.createElement('tr');
+            const badge = product.isLimited
+                ? '<span class="badge-yes">Yes</span>'
+                : '<span class="badge-no">No</span>';
+
+            row.innerHTML = `
+                <td><input type="checkbox" class="itemCheckbox" value="${product.id}" onchange="toggleBulkDeleteBtn()"></td>
+                <td>${product.id}</td>
+                <td>${product.name}</td>
+                <td>${product.category}</td>
+                <td>${product.subCategory}</td>
+                <td><small style="color:var(--text-muted);">${product.keywords || ''}</small></td>
+                <td>${badge}</td>
+                <td>LKR ${parseFloat(product.price).toFixed(2)}</td>
+                <td>
+                    <button class="remove-btn" style="margin-bottom:4px;" onclick="editProduct('${product.id}')">Edit</button>
+                    <button class="remove-btn" onclick="removeProduct('${product.id}')">Remove</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (err) {
+        console.error('Load products error:', err);
+        tableBody.innerHTML = '<tr><td colspan="9" style="color:red;">Connection error. Make sure XAMPP is running.</td></tr>';
     }
 }
 
-// --- HELPER FUNCTIONS (The logic behind the scenes) ---
-
-function saveProductToStorage(product) {
-    // 1. Get the current list from memory. 
-    // JSON.parse turns the text string back into a JavaScript Array.
-    // "|| []" means "if memory is empty, create a new empty list".
-    const products = JSON.parse(localStorage.getItem('fandomProducts')) || [];
-
-    // 2. Add the new product to the FRONT of the list so it appears first in New Arrivals.
-    products.unshift(product);
-
-    // 3. Save it back to memory.
-    // JSON.stringify turns the Array into a text string (Storage only accepts strings).
-    localStorage.setItem('fandomProducts', JSON.stringify(products));
-}
-
-function loadTableFromStorage() {
-    const tableBody = document.getElementById('itemsTableBody');
-    if (!tableBody) return; // specific check to avoid errors
-
-    tableBody.innerHTML = ''; // Wipe the table clean first
-
-    // Get the data
-    const products = JSON.parse(localStorage.getItem('fandomProducts')) || [];
-
-    // Loop through every product and build a table row <tr>
-    products.forEach((product, index) => {
-        const row = document.createElement('tr');
-
-        const badge = product.isLimited
-            ? '<span class="badge-yes">Yes</span>'
-            : '<span class="badge-no">No</span>';
-
-        // We insert the data into the HTML
-        row.innerHTML = `
-            <td><input type="checkbox" class="itemCheckbox" value="${index}" onchange="toggleBulkDeleteBtn()"></td>
-            <td>${product.id}</td>
-            <td>${product.name}</td>
-            <td>${product.category}</td>
-            <td>${product.subCategory}</td>
-            <td><small style="color:var(--text-muted);">${product.keywords || ''}</small></td>
-            <td>${badge}</td>
-            <td>LKR ${product.price}</td>
-            <td>
-                <button class="remove-btn" style="margin-bottom:4px;" onclick="editProduct(${index})">Edit</button>
-                <button class="remove-btn" onclick="removeProduct(${index})">Remove</button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
-
+// --- CLEAR INPUTS ---
 function clearInputs() {
-    document.getElementById('itemId').value = "";
-    document.getElementById('itemName').value = "";
-    document.getElementById('itemPrice').value = "";
-    document.getElementById('itemImage').value = "";
-    document.getElementById('itemKeywords').value = "";
+    document.getElementById('itemId').value        = '';
+    document.getElementById('itemName').value      = '';
+    document.getElementById('itemPrice').value     = '';
+    document.getElementById('itemImage').value     = '';
+    document.getElementById('itemKeywords').value  = '';
     document.getElementById('itemLimited').checked = false;
     document.getElementById('itemPopular').checked = false;
-    document.getElementById('itemCategory').selectedIndex = 0;
+    document.getElementById('itemCategory').selectedIndex    = 0;
     document.getElementById('itemSubCategory').selectedIndex = 0;
 }
 
-// Global function for the Remove button
-window.removeProduct = function (index) {
-    if (confirm("Are you sure you want to remove this item?")) {
-        const products = JSON.parse(localStorage.getItem('fandomProducts')) || [];
-        products.splice(index, 1);
-        localStorage.setItem('fandomProducts', JSON.stringify(products));
-        loadTableFromStorage();
+// --- REMOVE PRODUCT ---
+window.removeProduct = async function (productId) {
+    if (!confirm('Are you sure you want to remove this item?')) return;
+
+    const fd = new FormData();
+    fd.append('id', productId);
+
+    try {
+        const res  = await fetch('php/products/delete_product.php', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.success) {
+            loadTableFromDB();
+        } else {
+            alert('Error: ' + (data.error || 'Delete failed.'));
+        }
+    } catch (err) {
+        console.error('Remove product error:', err);
+        alert('Connection error.');
     }
 };
 
-// Global function for the Edit button
-window.editProduct = function (index) {
+// --- EDIT PRODUCT (pre-fill form from DB data) ---
+window.editProduct = async function (productId) {
     const products = JSON.parse(localStorage.getItem('fandomProducts')) || [];
-    const product = products[index];
-    if (!product) return;
+    const product  = products.find(p => p.id === productId);
+    if (!product) {
+        alert('Product not found. Please refresh.');
+        return;
+    }
 
-    // Pre-fill form fields
-    document.getElementById('itemId').value = product.id || '';
-    document.getElementById('itemName').value = product.name || '';
-    document.getElementById('itemPrice').value = product.price || '';
-    document.getElementById('itemImage').value = product.image || '';
+    document.getElementById('itemId').value       = product.id       || '';
+    document.getElementById('itemName').value     = product.name     || '';
+    document.getElementById('itemPrice').value    = product.price    || '';
+    document.getElementById('itemImage').value    = product.image    || '';
     document.getElementById('itemKeywords').value = product.keywords || '';
     document.getElementById('itemLimited').checked = !!product.isLimited;
     document.getElementById('itemPopular').checked = !!product.isPopular;
 
-    // Set select dropdowns
     const catSelect = document.getElementById('itemCategory');
     const subSelect = document.getElementById('itemSubCategory');
-    for (let opt of catSelect.options) { if (opt.value === product.category) { opt.selected = true; break; } }
+    for (let opt of catSelect.options) { if (opt.value === product.category)    { opt.selected = true; break; } }
     for (let opt of subSelect.options) { if (opt.value === product.subCategory) { opt.selected = true; break; } }
 
-    // Store editing index and change button label
-    document.getElementById('editIndexInput').value = index;
+    // Store editing ID
+    document.getElementById('editIndexInput').value = productId;
     const addBtn = document.getElementById('addItemBtn');
-    addBtn.textContent = 'Update Item';
+    addBtn.textContent  = 'Update Item';
     addBtn.style.background = 'linear-gradient(135deg, #ff8c00, #ff0055)';
 
-    // Scroll form into view
     document.querySelector('.add-item-form').scrollIntoView({ behavior: 'smooth' });
 };
 
-function loadUsersFromStorage() {
+// --- LOAD USERS FROM DB ---
+async function loadUsersFromDB() {
     const tableBody = document.getElementById('usersTableBody');
     if (!tableBody) return;
+    tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;">Loading...</td></tr>';
 
-    tableBody.innerHTML = ''; // Wipe clean
+    try {
+        const res  = await fetch('php/users/get_users.php');
+        const data = await res.json();
 
-    const users = JSON.parse(localStorage.getItem('fandomUsers')) || [];
+        if (!data.success) {
+            tableBody.innerHTML = `<tr><td colspan="6" style="color:red;">${data.error}</td></tr>`;
+            return;
+        }
 
-    users.forEach((user, index) => {
-        const row = document.createElement('tr');
+        tableBody.innerHTML = '';
+        if (data.users.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;">No users registered yet.</td></tr>';
+            return;
+        }
 
-        const badge = user.role === 'admin'
-            ? '<span class="badge-yes">Admin</span>'
-            : '<span class="badge-no">Customer</span>';
+        data.users.forEach(user => {
+            const row      = document.createElement('tr');
+            const badge    = user.role === 'admin'
+                ? '<span class="badge-yes">Admin</span>'
+                : '<span class="badge-no">Customer</span>';
+            const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
 
-        const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
-
-        row.innerHTML = `
-            <td>#U${index + 101}</td>
-            <td>${fullName || 'Unknown'}</td>
-            <td>${user.username}</td>
-            <td>${user.email}</td>
-            <td>${badge}</td>
-            <td>
-                <button class="remove-btn" onclick="removeUser(${index})">Remove</button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
+            row.innerHTML = `
+                <td>#U${user.id}</td>
+                <td>${fullName || 'Unknown'}</td>
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td>${badge}</td>
+                <td>
+                    <button class="remove-btn" onclick="removeUser(${user.id})">Remove</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (err) {
+        console.error('Load users error:', err);
+        tableBody.innerHTML = '<tr><td colspan="6" style="color:red;">Connection error. Make sure XAMPP is running.</td></tr>';
+    }
 }
 
-window.removeUser = function (index) {
-    if (confirm("Are you sure you want to remove this user?")) {
-        const users = JSON.parse(localStorage.getItem('fandomUsers')) || [];
-        users.splice(index, 1);
-        localStorage.setItem('fandomUsers', JSON.stringify(users));
-        loadUsersFromStorage();
+// --- REMOVE USER ---
+window.removeUser = async function (userId) {
+    if (!confirm('Are you sure you want to remove this user?')) return;
+
+    const fd = new FormData();
+    fd.append('id', userId);
+
+    try {
+        const res  = await fetch('php/users/delete_user.php', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.success) {
+            loadUsersFromDB();
+        } else {
+            alert('Error: ' + (data.error || 'Delete failed.'));
+        }
+    } catch (err) {
+        console.error('Remove user error:', err);
+        alert('Connection error.');
     }
 };

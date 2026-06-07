@@ -1,154 +1,190 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* --- VIEW TOGGLE LOGIC --- */
-    const loginContainer = document.getElementById('loginContainer');
+    /* -------------------------------------------------------
+       VIEW TOGGLE LOGIC (Login <-> Signup panel)
+    ------------------------------------------------------- */
+    const loginContainer  = document.getElementById('loginContainer');
     const signupContainer = document.getElementById('signupContainer');
-    const showSignupLink = document.getElementById('showSignup');
-    const showLoginLink = document.getElementById('showLogin');
+    const showSignupLink  = document.getElementById('showSignup');
+    const showLoginLink   = document.getElementById('showLogin');
 
-    showSignupLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        loginContainer.style.display = 'none';
-        signupContainer.style.display = 'block';
-    });
+    if (showSignupLink) {
+        showSignupLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginContainer.style.display  = 'none';
+            signupContainer.style.display = 'block';
+        });
+    }
+    if (showLoginLink) {
+        showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupContainer.style.display = 'none';
+            loginContainer.style.display  = 'block';
+        });
+    }
 
-    showLoginLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        signupContainer.style.display = 'none';
-        loginContainer.style.display = 'block';
-    });
-
-    /* --- LOGIN LOGIC --- */
-    const loginBtn = document.getElementById('loginBtn');
+    /* -------------------------------------------------------
+       LOGIN LOGIC — PHP backend
+    ------------------------------------------------------- */
+    const loginBtn           = document.getElementById('loginBtn');
     const loginUsernameInput = document.getElementById('loginUsername');
     const loginPasswordInput = document.getElementById('loginPassword');
 
-    loginBtn.addEventListener('click', () => {
-        const userIn = loginUsernameInput.value.trim();
-        const passIn = loginPasswordInput.value.trim();
+    if (loginBtn) {
+        loginBtn.addEventListener('click', async () => {
+            const userIn = loginUsernameInput.value.trim();
+            const passIn = loginPasswordInput.value.trim();
 
-        if (userIn === "" || passIn === "") {
-            alert("Please fill in both Username and Password fields.");
-            return;
-        }
-
-        // Check Admin
-        if (userIn === "admin") {
-            if (passIn === "admin123") {
-                localStorage.setItem("currentUser", JSON.stringify({ name: "Drifter", role: "admin" }));
-                alert("Welcome, Admin Drifter.");
-                window.location.href = "admin_dashboard.html";
-                return;
-            } else if (passIn === "admin456") {
-                localStorage.setItem("currentUser", JSON.stringify({ name: "Ryzlo", role: "admin" }));
-                alert("Welcome, Admin Ryzlo.");
-                window.location.href = "admin_dashboard.html";
+            if (!userIn || !passIn) {
+                alert("Please fill in both Username and Password fields.");
                 return;
             }
-            alert("Invalid Admin Credentials.");
-            return; 
-        }
 
-        // Check Customer
-        const users = JSON.parse(localStorage.getItem('fandomUsers')) || [];
-        const foundUser = users.find(u => u.username === userIn && u.password === passIn);
+            loginBtn.textContent = 'Logging in...';
+            loginBtn.disabled    = true;
 
-        if (foundUser) {
-            localStorage.setItem("currentUser", JSON.stringify({
-                name: foundUser.firstName,
-                username: foundUser.username,
-                role: "customer"
-            }));
-            window.location.href = "index.html"; // Redirect to home
-        } else {
-            alert("Invalid Username or Password.");
-        }
-    });
+            const formData = new FormData();
+            formData.append('username', userIn);
+            formData.append('password', passIn);
 
-    /* --- SIGNUP LOGIC --- */
+            try {
+                const res  = await fetch('php/auth/login.php', { method: 'POST', body: formData });
+                const data = await res.json();
+
+                if (data.success) {
+                    // Store minimal user info for UI (session is the auth source of truth)
+                    localStorage.setItem('currentUser', JSON.stringify(data.user));
+                    window.location.href = data.redirectTo;
+                } else {
+                    alert(data.error || "Invalid username or password.");
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                alert("Connection error. Make sure XAMPP is running.");
+            } finally {
+                loginBtn.textContent = 'Login';
+                loginBtn.disabled    = false;
+            }
+        });
+    }
+
+    /* -------------------------------------------------------
+       SIGNUP LOGIC — PHP backend
+    ------------------------------------------------------- */
     const signupBtn = document.getElementById('signupBtn');
-    
-    signupBtn.addEventListener('click', () => {
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const username = document.getElementById('regUsername').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('regPassword').value.trim();
-        const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-        document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
-        let isValid = true;
+    if (signupBtn) {
+        signupBtn.addEventListener('click', async () => {
+            const firstName       = document.getElementById('firstName').value.trim();
+            const lastName        = document.getElementById('lastName').value.trim();
+            const username        = document.getElementById('regUsername').value.trim();
+            const email           = document.getElementById('email').value.trim();
+            const password        = document.getElementById('regPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-        if (username.length < 5 || username.length > 15) {
-            showError('usernameError', 'Username must be 5-15 characters');
-            isValid = false;
-        }
+            // Clear previous error messages
+            document.querySelectorAll('.error-msg').forEach(el => {
+                el.style.display = 'none';
+                el.innerText = '';
+            });
 
-        const existingUsers = JSON.parse(localStorage.getItem('fandomUsers')) || [];
-        if (existingUsers.some(user => user.username === username)) {
-            showError('usernameError', 'Username already taken!');
-            isValid = false;
-        }
+            // Client-side pre-validation
+            let localValid = true;
+            if (username.length < 5 || username.length > 15) {
+                showError('usernameError', 'Username must be 5-15 characters');
+                localValid = false;
+            }
+            const emailRules = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRules.test(email)) {
+                showError('emailError', 'Enter a valid email');
+                localValid = false;
+            }
+            const passwordRules = /^(?=.*\d)(?=.*[A-Z]).{8,}$/;
+            if (!passwordRules.test(password)) {
+                showError('passwordError', '8+ chars, 1 number & 1 uppercase');
+                localValid = false;
+            }
+            if (password !== confirmPassword) {
+                showError('confirmPasswordError', "Passwords don't match.");
+                localValid = false;
+            }
+            if (!localValid) return;
 
-        const emailRules = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRules.test(email)) {
-            showError('emailError', 'Enter a valid email');
-            isValid = false;
-        }
+            signupBtn.textContent = 'Creating account...';
+            signupBtn.disabled    = true;
 
-        const passwordRules = /^(?=.*\d)(?=.*[A-Z]).{8,}$/;
-        if (!passwordRules.test(password)) {
-            showError('passwordError', '8+ chars, 1 number & 1 uppercase');
-            isValid = false;
-        }
+            const formData = new FormData();
+            formData.append('firstName',       firstName);
+            formData.append('lastName',        lastName);
+            formData.append('username',        username);
+            formData.append('email',           email);
+            formData.append('password',        password);
+            formData.append('confirmPassword', confirmPassword);
 
-        if (password !== confirmPassword) {
-            showError('confirmPasswordError', "Passwords don't match.");
-            isValid = false;
-        }
+            try {
+                const res  = await fetch('php/auth/register.php', { method: 'POST', body: formData });
+                const data = await res.json();
 
-        if (isValid) {
-            const newUser = {
-                firstName: firstName,
-                lastName: lastName,
-                username: username,
-                email: email,
-                password: password,
-                role: "customer"
-            };
+                if (data.success) {
+                    alert("Account created successfully! Please Log In.");
+                    signupContainer.style.display = 'none';
+                    loginContainer.style.display  = 'block';
+                    loginUsernameInput.value = username;
+                    loginPasswordInput.value = '';
+                } else if (data.errors) {
+                    Object.entries(data.errors).forEach(([field, msg]) => {
+                        const map = {
+                            username: 'usernameError',
+                            email:    'emailError',
+                            password: 'passwordError',
+                            confirmPassword: 'confirmPasswordError',
+                        };
+                        if (map[field]) showError(map[field], msg);
+                    });
+                } else {
+                    alert(data.error || "Registration failed. Please try again.");
+                }
+            } catch (err) {
+                console.error('Signup error:', err);
+                alert("Connection error. Make sure XAMPP is running.");
+            } finally {
+                signupBtn.textContent = 'Create Account';
+                signupBtn.disabled    = false;
+            }
+        });
+    }
 
-            existingUsers.push(newUser);
-            localStorage.setItem('fandomUsers', JSON.stringify(existingUsers));
-
-            alert("Account created successfully! Please Log In.");
-            // Switch back to Login view
-            signupContainer.style.display = 'none';
-            loginContainer.style.display = 'block';
-            
-            // Auto-fill the username for convenience
-            loginUsernameInput.value = username;
-            loginPasswordInput.value = ""; 
-        }
-    });
-
+    /* -------------------------------------------------------
+       HELPER: show field error
+    ------------------------------------------------------- */
     function showError(elementId, message) {
         const el = document.getElementById(elementId);
         if (el) { el.innerText = message; el.style.display = 'block'; }
     }
 
-    /* --- GOOGLE & GUEST BUTTONS --- */
-    document.getElementById('googleBtn').addEventListener('click', () => {
-        alert("Google Login API would be integrated here.");
-    });
+    /* -------------------------------------------------------
+       GOOGLE & GUEST BUTTONS
+    ------------------------------------------------------- */
+    const googleBtn = document.getElementById('googleBtn');
+    if (googleBtn) {
+        googleBtn.addEventListener('click', () => {
+            alert("Google Login API would be integrated here.");
+        });
+    }
 
-    document.getElementById('guestBtn').addEventListener('click', () => {
-        localStorage.removeItem("currentUser"); // Ensure no one is logged in
-        window.location.href = "index.html"; // Go straight to store
-    });
+    const guestBtn = document.getElementById('guestBtn');
+    if (guestBtn) {
+        guestBtn.addEventListener('click', () => {
+            localStorage.removeItem("currentUser");
+            window.location.href = "index.html";
+        });
+    }
 
-    /* --- SLIDER LOGIC --- */
+    /* -------------------------------------------------------
+       SLIDER LOGIC
+    ------------------------------------------------------- */
     const slides = document.querySelectorAll(".side-slide");
-    if(slides.length > 0) {
+    if (slides.length > 0) {
         let currentSlide = 0;
         setInterval(() => {
             slides[currentSlide].classList.remove("active");
