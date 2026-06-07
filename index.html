@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FandomVerse - Your Ultimate Merch Destination</title>
     <meta name="description" content="Shop the best anime, gaming, and movie merchandise at FandomVerse.">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=1.2">
 </head>
 
 <body>
@@ -47,21 +47,19 @@
             <div class="hero-overlay"></div>
         </section>
         <div class="about-section highlight-bg">
-            <div class="about-text">
-                <h2>Quality Uncompromised</h2>
-                <p>Every piece of our collection is curated with absolute perfection in mind. We know the details matter
-                    – from the paint job on a 1/7 scale figure to the vibrant print quality of our posters.</p>
-                <p>It's not just merch. It's an extension of the worlds you love, brought right into your living room.
-                </p>
+            <div class="about-text anim-slide-left">
+                <h2 class="anim-unblur">Quality Uncompromised</h2>
+                <p class="typewriter-text">Every piece of our collection is curated with absolute perfection in mind. We know the details matter – from the paint job on a 1/7 scale figure to the vibrant print quality of our posters.</p>
+                <p class="typewriter-text">It's not just merch. It's an extension of the worlds you love, brought right into your living room.</p>
             </div>
-            <div class="about-image glass">
+            <div class="about-image glass anim-slide-up-zoom">
                 <img src="rsc/imgs/action figures.png" alt="Cinematic Set">
             </div>
         </div>
 
         <section class="slider-section">
-            <h2 class="section-title">Most Popular</h2>
-            <div class="slider-wrapper">
+            <h2 class="section-title anim-slide-up-zoom">Most Popular</h2>
+            <div class="slider-wrapper anim-slide-up-zoom" style="transition-delay:0.15s">
                 <div class="slider-track" id="popular-track">
                     <div class="product-card glass" style="cursor: pointer;"
                         onclick="window.location.href='product_detail.html?id=prod43'">
@@ -189,8 +187,8 @@
         </section>
 
         <section class="slider-section">
-            <h2 class="section-title">New Arrivals</h2>
-            <div class="slider-wrapper">
+            <h2 class="section-title anim-slide-up-zoom">New Arrivals</h2>
+            <div class="slider-wrapper anim-slide-up-zoom" style="transition-delay:0.15s">
                 <div class="slider-track" id="new-arrivals-track">
                     
                 </div>
@@ -198,13 +196,13 @@
         </section>
 
         <section class="container contact-section" id="contact">
-            <h2 class="section-title">Contact Us</h2>
+            <h2 class="section-title anim-slide-up-zoom">Contact Us</h2>
             <div class="contact-layout">
-                <div class="contact-image-wrapper">
+                <div class="contact-image-wrapper anim-slide-left">
                     <img src="https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=800&q=80"
                         alt="Fandomverse Merchandise Collection on Display" loading="lazy">
                 </div>
-                <div class="contact-form-container glass">
+                <div class="contact-form-container glass anim-slide-right">
                     <form id="contact-form"
                         onsubmit="event.preventDefault(); alert('Message sent successfully!'); this.reset();">
                         <div class="form-group">
@@ -231,7 +229,7 @@
         <p>&copy; 2026 FandomVerse. All Rights Reserved.</p>
     </footer>
 
-    <script src="js/script.js?v=1.1"></script>
+    <script src="js/script.js?v=1.3"></script>
     <script src="js/index.js"></script>
 </body>
 

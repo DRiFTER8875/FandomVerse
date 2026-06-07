@@ -1,5 +1,6 @@
-document.addEventListener("DOMContentLoaded", () => {
-    
+
+function initApp() {
+
     const header = document.querySelector('header');
     if (header && !document.querySelector('.hamburger')) {
         const hamburger = document.createElement('div');
@@ -334,8 +335,195 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    
-});
+    // ==========================================================================
+    // Scroll-based Bidirectional Animations
+    // ==========================================================================
+
+    // Store original typewriter text and blank them initially
+    const typewriterParagraphs = document.querySelectorAll('.typewriter-text');
+    typewriterParagraphs.forEach(p => {
+        p.setAttribute('data-original-text', p.innerText.trim());
+        p.innerText = '';
+        p.style.visibility = 'hidden';
+    });
+
+    // Track active typewriter interval IDs per container
+    const activeTypewriters = new Map();
+
+    // Collect all elements that need scroll animations
+    const animEls = Array.from(document.querySelectorAll(
+        '.anim-zoom-in, .anim-slide-left, .anim-slide-right, .anim-slide-up-zoom, .anim-unblur'
+    ));
+
+    // ─── Core scroll check ────────────────────────────────────────────────────
+    // Runs on every scroll event. For each animated element:
+    //   • If element is "in focus" (substantially in viewport) → add animate-active
+    //   • If element is "out of focus"                         → remove animate-active
+    //
+    // Removing .animate-active causes the CSS transition to play BACKWARDS:
+    //   .anim-slide-left    → slides back out to the LEFT
+    //   .anim-slide-right   → slides back out to the RIGHT
+    //   .anim-slide-up-zoom → zooms back DOWN (out through the bottom)
+    //   .anim-zoom-in       → shrinks back (zooms out)
+    //   .anim-unblur        → blurs back out
+
+    function checkScrollAnimations() {
+        const vh = window.innerHeight;
+
+        animEls.forEach(el => {
+            const r         = el.getBoundingClientRect();
+            // "In focus" = top is above 85% of viewport AND bottom is below 15%
+            const inFocus   = r.top < vh * 0.85 && r.bottom > vh * 0.15;
+            const isActive  = el.classList.contains('animate-active');
+
+            if (inFocus && !isActive) {
+                // ── ANIMATE IN ──────────────────────────────────────────────
+                el.classList.add('animate-active');
+
+                // Trigger typewriter for slide-left OR slide-right containers with typewriter text
+                const hasTypewriter = el.querySelector('.typewriter-text');
+                if ((el.classList.contains('anim-slide-left') || el.classList.contains('anim-slide-right')) && hasTypewriter) {
+                    typewriterForward(el);
+                }
+
+            } else if (!inFocus && isActive) {
+                // ── REVERSE OUT ─────────────────────────────────────────────
+                el.classList.remove('animate-active');
+
+                // Reverse typewriter for slide-left OR slide-right containers
+                const hasTypewriter = el.querySelector('.typewriter-text');
+                if ((el.classList.contains('anim-slide-left') || el.classList.contains('anim-slide-right')) && hasTypewriter) {
+                    typewriterReverse(el);
+                }
+
+                // Reset any anim-unblur children (e.g. section h2 headings)
+                el.querySelectorAll('.anim-unblur').forEach(child => {
+                    child.classList.remove('animate-active');
+                });
+            }
+        });
+    }
+
+    // Listen on scroll (passive = no jank)
+    window.addEventListener('scroll', checkScrollAnimations, { passive: true });
+    // Also run once at load in case elements are already in view
+    requestAnimationFrame(checkScrollAnimations);
+
+
+    // ── Helper: cancel running typewriter timers ───────────────────────────────
+    function cancelTypewriter(container) {
+        const ids = activeTypewriters.get(container);
+        if (ids) ids.forEach(id => clearInterval(id));
+        activeTypewriters.delete(container);
+    }
+
+
+    // ── FORWARD typewriter ─────────────────────────────────────────────────────
+    // Types all paragraphs in sequence.
+    // Duration is read from data-typing-duration attribute (ms), default 2000.
+    function typewriterForward(container) {
+        const paragraphs = Array.from(container.querySelectorAll('.typewriter-text'));
+        if (!paragraphs.length) return;
+
+        cancelTypewriter(container);
+        const timerIds = [];
+        activeTypewriters.set(container, timerIds);
+
+        // Blank all paragraphs first
+        paragraphs.forEach(p => {
+            p.innerText = '';
+            p.style.visibility = 'hidden';
+            p.classList.remove('typing-active');
+        });
+
+        // Read per-container duration (e.g. 2500 on About page, 2000 on Home)
+        const TOTAL_MS   = parseInt(container.getAttribute('data-typing-duration'), 10) || 2000;
+        const totalChars = paragraphs.reduce(
+            (sum, p) => sum + (p.getAttribute('data-original-text') || '').length, 0
+        );
+        const msPerChar = Math.max(8, Math.floor(TOTAL_MS / (totalChars || 1)));
+
+        let index = 0;
+        function typeNext() {
+            if (index >= paragraphs.length) return;
+            const p    = paragraphs[index];
+            const text = p.getAttribute('data-original-text') || '';
+            p.innerText = '';
+            p.style.visibility = 'visible';
+            p.classList.add('typing-active');
+            let i = 0;
+            const tid = setInterval(() => {
+                if (i < text.length) {
+                    p.append(text[i++]);
+                } else {
+                    clearInterval(tid);
+                    p.classList.remove('typing-active');
+                    index++;
+                    setTimeout(typeNext, 60);
+                }
+            }, msPerChar);
+            timerIds.push(tid);
+        }
+        typeNext();
+    }
+
+
+    // ── REVERSE typewriter ─────────────────────────────────────────────────────
+    // Deletes characters from the LAST paragraph to the FIRST (~700 ms total).
+    // This mirrors the forward order so it feels like an exact reversal.
+    function typewriterReverse(container) {
+        const paragraphs = Array.from(container.querySelectorAll('.typewriter-text'));
+        if (!paragraphs.length) return;
+
+        cancelTypewriter(container);
+        const timerIds = [];
+        activeTypewriters.set(container, timerIds);
+
+        // Count currently visible characters
+        const totalChars = paragraphs.reduce((sum, p) => sum + p.innerText.length, 0);
+        const DELETE_MS  = 700;
+        const msPerChar  = Math.max(5, Math.floor(DELETE_MS / (totalChars || 1)));
+
+        // Work backwards through paragraphs
+        const reversed = [...paragraphs].reverse();
+        let index = 0;
+
+        function deleteNext() {
+            if (index >= reversed.length) return;
+            const p = reversed[index];
+
+            // Skip if already empty
+            if (!p.innerText.length) {
+                p.style.visibility = 'hidden';
+                p.classList.remove('typing-active');
+                index++;
+                deleteNext();
+                return;
+            }
+
+            p.classList.add('typing-active');
+            const tid = setInterval(() => {
+                if (p.innerText.length > 0) {
+                    p.innerText = p.innerText.slice(0, -1);
+                } else {
+                    clearInterval(tid);
+                    p.classList.remove('typing-active');
+                    p.style.visibility = 'hidden';
+                    index++;
+                    setTimeout(deleteNext, 30);
+                }
+            }, msPerChar);
+            timerIds.push(tid);
+        }
+        deleteNext();
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
 
 function updateCartBadge() {
     const cartCount = document.getElementById('cart-count');

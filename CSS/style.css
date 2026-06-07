@@ -995,3 +995,80 @@ footer {
         transform: none;
     }
 }
+
+/* ==========================================================================
+   Scroll Animation Classes
+   ========================================================================== */
+
+/* 1. Zoom In Scroll Animation */
+.anim-zoom-in {
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.anim-zoom-in.animate-active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* 2. Slide In Left Scroll Animation */
+.anim-slide-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.anim-slide-left.animate-active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 3. Slide In Right Scroll Animation */
+.anim-slide-right {
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.anim-slide-right.animate-active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 4. Slide Up & Zoom In (for about image) */
+.anim-slide-up-zoom {
+    opacity: 0;
+    transform: translateY(60px) scale(0.92);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.anim-slide-up-zoom.animate-active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* 5. Unblur / Fade-in (for "Quality Uncompromised" header) */
+.anim-unblur {
+    opacity: 0;
+    filter: blur(12px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, filter;
+}
+.anim-unblur.animate-active {
+    opacity: 1;
+    filter: blur(0);
+}
+
+/* 6. Typewriter blink cursor */
+.typing-active::after {
+    content: '_';
+    display: inline-block;
+    color: var(--primary-color);
+    animation: blink-cursor 0.75s step-end infinite;
+    margin-left: 2px;
+}
+@keyframes blink-cursor {
+    from, to { opacity: 0 }
+    50% { opacity: 1 }
+}
