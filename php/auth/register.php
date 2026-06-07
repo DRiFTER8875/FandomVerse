@@ -46,7 +46,7 @@ if (!empty($errors)) {
     json_response(['success' => false, 'errors' => $errors]);
 }
 
-// check uniqueness
+// check if username or email is already taken
 $stmt = $conn->prepare('SELECT id FROM users WHERE username = ? OR email = ?');
 $stmt->bind_param('ss', $username, $email);
 $stmt->execute();

@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS orders (
     city           VARCHAR(100)   NOT NULL,
     items_json     TEXT           NOT NULL,
     total          DECIMAL(10,2)  NOT NULL,
+    payment_method VARCHAR(50)    NOT NULL DEFAULT 'Card',
     status         VARCHAR(50)    NOT NULL DEFAULT 'Processing',
     created_at     TIMESTAMP      DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;

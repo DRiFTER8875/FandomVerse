@@ -7,12 +7,24 @@
     <title>Order Successful | FandomVerse</title>
     <link rel="stylesheet" href="CSS/style.css">
     <style>
+        .success-layout {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
         .success-box {
             text-align: center;
-            max-width: 600px;
-            margin: 100px auto;
+            flex: 1;
+            min-width: 320px;
+            max-width: 500px;
             padding: 50px 30px;
             border-radius: 20px;
+            margin: 0;
+            order: 2;
         }
 
         .checkmark {
@@ -20,7 +32,43 @@
             color: #00e676;
             margin-bottom: 20px;
         }
+
+        #receipt-section {
+            flex: 1.2;
+            min-width: 320px;
+            max-width: 600px;
+            margin: 0;
+            order: 1;
+        }
+
+        #receipt-container {
+            background: #ffffff;
+            color: #333333;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 992px) {
+            .success-layout {
+                flex-direction: column;
+                align-items: center;
+            }
+            .success-box {
+                width: 100%;
+                max-width: 600px;
+                order: 1;
+                margin-bottom: 20px;
+            }
+            #receipt-section {
+                width: 100%;
+                max-width: 600px;
+                order: 2;
+            }
+        }
     </style>
+    <!-- Include html2pdf.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
 <body>
@@ -29,17 +77,308 @@
     </header>
 
     <main class="container">
-        <div class="glass success-box">
-            <div class="checkmark">✔</div>
-            <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Order Placed Successfully!</h1>
-            <p style="color: #aaa; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">
-                Thank you for your simulated purchase! Your order details have been saved locally. Real-world shipping
-                times do not apply in this simulated environment.
-            </p>
-            <a href="index.html" class="btn btn-primary" style="margin-right: 15px;">Return to Home</a>
-            <a href="Explore.html" class="btn btn-outline">Keep Shopping</a>
+        <div class="success-layout">
+            <div class="glass success-box">
+                <div class="checkmark">✔</div>
+                <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Order Placed Successfully!</h1>
+                <p style="color: #aaa; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">
+                    Thank you for your simulated purchase! Your order details have been saved locally. Real-world shipping
+                    times do not apply in this simulated environment.
+                </p>
+                <a href="index.html" class="btn btn-primary" style="margin-right: 15px;">Return to Home</a>
+                <a href="Explore.html" class="btn btn-outline">Keep Shopping</a>
+            </div>
+
+            <div id="receipt-section">
+            <div id="receipt-container">
+                <!-- Receipt Header -->
+                <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 20px;">
+                    <div>
+                        <h1 style="margin: 0; color: #1a1a1a; font-size: 2rem; font-family: 'Outfit', sans-serif;">RECEIPT</h1>
+                        <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9rem;">FandomVerse Merch Store</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <h2 style="margin: 0; color: #8A2BE2; font-size: 1.4rem; font-family: 'Outfit', sans-serif;">FandomVerse</h2>
+                        <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9rem;" id="receipt-date"></p>
+                    </div>
+                </div>
+
+                <!-- Receipt Metadata -->
+                <div style="display: flex; justify-content: space-between; margin-bottom: 30px; gap: 20px; font-size: 0.9rem;">
+                    <div>
+                        <strong style="color: #555;">Order ID:</strong>
+                        <p style="margin: 5px 0 0 0; font-weight: bold; color: #1a1a1a;" id="receipt-order-id"></p>
+                        <strong style="color: #555; display: block; margin-top: 15px;">Payment Method:</strong>
+                        <p style="margin: 5px 0 0 0; font-weight: bold; color: #1a1a1a;" id="receipt-payment-method"></p>
+                    </div>
+                    <div style="text-align: right;">
+                        <strong style="color: #555;">Ship To:</strong>
+                        <p style="margin: 5px 0 0 0; font-weight: bold; color: #1a1a1a;" id="receipt-client-name"></p>
+                        <p style="margin: 2px 0 0 0; color: #666;" id="receipt-client-email"></p>
+                        <p style="margin: 2px 0 0 0; color: #666;" id="receipt-client-address"></p>
+                        <p style="margin: 2px 0 0 0; color: #666;" id="receipt-client-city"></p>
+                    </div>
+                </div>
+
+                <!-- Items Table -->
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 0.9rem;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #eee; text-align: left; color: #666;">
+                            <th style="padding: 10px 0; font-weight: 600;">Item</th>
+                            <th style="padding: 10px 0; font-weight: 600; text-align: center;">Qty</th>
+                            <th style="padding: 10px 0; font-weight: 600; text-align: right;">Price</th>
+                            <th style="padding: 10px 0; font-weight: 600; text-align: right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="receipt-items-body">
+                        <!-- Dynamic rows populated by script -->
+                    </tbody>
+                </table>
+
+                <!-- Totals -->
+                <div style="border-top: 1px solid #eee; padding-top: 15px; font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #666;">Subtotal</span>
+                        <span style="font-weight: 600; color: #1a1a1a;" id="receipt-subtotal"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #666;">Shipping</span>
+                        <span style="font-weight: 600; color: #1a1a1a;" id="receipt-shipping"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-top: 2px solid #333; padding-top: 12px; font-size: 1.15rem; font-weight: bold; margin-top: 10px;">
+                        <span style="color: #1a1a1a;">Grand Total</span>
+                        <span style="color: #8A2BE2;" id="receipt-grand-total"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 25px;">
+                <button id="download-receipt-btn" class="btn btn-primary" style="padding: 12px 25px; font-size: 1.1rem; border: none; cursor: pointer;">
+                    📥 Download Receipt (PDF)
+                </button>
+            </div>
+        </div>
         </div>
     </main>
+
+    <script>
+        function initReceipt() {
+            console.log("FandomVerse: Starting initReceipt execution.");
+            try {
+                let details = null;
+                
+                // Try reading from lastOrderDetails
+                let orderDetailsStr = localStorage.getItem('lastOrderDetails');
+                console.log("FandomVerse: lastOrderDetails =", orderDetailsStr);
+                if (orderDetailsStr) {
+                    try {
+                        details = JSON.parse(orderDetailsStr);
+                        console.log("FandomVerse: Parsed details =", details);
+                    } catch (e) {
+                        console.error("FandomVerse: Failed to parse lastOrderDetails:", e);
+                    }
+                }
+                
+                // Try fallback from lastOrderId & fandomOrders
+                if (!details) {
+                    const lastOrderId = localStorage.getItem('lastOrderId');
+                    console.log("FandomVerse: lastOrderId =", lastOrderId);
+                    if (lastOrderId) {
+                        let orders = [];
+                        try {
+                            orders = JSON.parse(localStorage.getItem('fandomOrders')) || [];
+                            console.log("FandomVerse: Loaded fandomOrders =", orders);
+                        } catch (e) {
+                            console.error("FandomVerse: Failed to parse fandomOrders:", e);
+                        }
+                        if (Array.isArray(orders)) {
+                            const foundOrder = orders.find(o => o.orderId === lastOrderId);
+                            console.log("FandomVerse: foundOrder =", foundOrder);
+                            if (foundOrder) {
+                                details = {
+                                    orderId: foundOrder.orderId,
+                                    customerName: foundOrder.customer?.name || 'Customer',
+                                    customerEmail: foundOrder.customer?.email || '',
+                                    address: foundOrder.customer?.address || '',
+                                    city: foundOrder.customer?.city || '',
+                                    items: foundOrder.items || [],
+                                    subtotal: foundOrder.total,
+                                    shippingCost: 0,
+                                    total: foundOrder.total,
+                                    paymentMethod: foundOrder.paymentMethod || 'Card Payment',
+                                    date: foundOrder.date || new Date().toLocaleDateString('en-GB')
+                                };
+                            }
+                        }
+                    }
+                }
+
+                // Final fallback to Mock details
+                if (!details) {
+                    console.log("FandomVerse: No order details found in localStorage. Loading mock details fallback.");
+                    details = {
+                        orderId: "ORD-MOCK" + Math.floor(Math.random() * 1000000),
+                        customerName: "Alex Mercer",
+                        customerEmail: "alex.mercer@example.com",
+                        address: "456 Fandom Lane",
+                        city: "Metro City",
+                        items: [
+                            { name: "Gojo Figure", price: 3500.00, quantity: 1, size: "Standard", material: "PVC" },
+                            { name: "Demon Slayer Poster", price: 2150.00, quantity: 2, size: "A3", material: "Glossy Paper" }
+                        ],
+                        subtotal: 7800.00,
+                        shippingCost: 500.00,
+                        total: 8300.00,
+                        paymentMethod: "Cash on Delivery",
+                        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+                    };
+                }
+
+                if (details) {
+                    console.log("FandomVerse: Rendering receipt details:", details);
+                    const receiptSection = document.getElementById('receipt-section');
+                    if (receiptSection) {
+                        receiptSection.style.display = 'block';
+                        console.log("FandomVerse: Set receipt-section style.display to block");
+                    } else {
+                        console.warn("FandomVerse: receipt-section element not found in DOM");
+                    }
+                    
+                    const receiptDate = document.getElementById('receipt-date');
+                    if (receiptDate) receiptDate.innerText = details.date || new Date().toLocaleDateString('en-GB');
+
+                    const receiptOrderId = document.getElementById('receipt-order-id');
+                    if (receiptOrderId) receiptOrderId.innerText = details.orderId || '';
+
+                    const receiptPaymentMethod = document.getElementById('receipt-payment-method');
+                    if (receiptPaymentMethod) receiptPaymentMethod.innerText = details.paymentMethod || 'Card Payment';
+
+                    const receiptClientName = document.getElementById('receipt-client-name');
+                    if (receiptClientName) receiptClientName.innerText = details.customerName || 'Customer';
+
+                    const receiptClientEmail = document.getElementById('receipt-client-email');
+                    if (receiptClientEmail) receiptClientEmail.innerText = details.customerEmail || '';
+
+                    const receiptClientAddress = document.getElementById('receipt-client-address');
+                    if (receiptClientAddress) receiptClientAddress.innerText = details.address || '';
+
+                    const receiptClientCity = document.getElementById('receipt-client-city');
+                    if (receiptClientCity) receiptClientCity.innerText = details.city || '';
+                    
+                    const tbody = document.getElementById('receipt-items-body');
+                    if (tbody) {
+                        tbody.innerHTML = '';
+                        
+                        let items = details.items || [];
+                        if (typeof items === 'string') {
+                            try {
+                                items = JSON.parse(items);
+                            } catch (e) {
+                                items = [];
+                            }
+                        }
+                        if (!Array.isArray(items)) {
+                            items = [];
+                        }
+                        
+                        let calculatedSubtotal = 0;
+                        items.forEach(item => {
+                            if (!item) return;
+                            const price = parseFloat(item.price) || 0;
+                            const qty = parseInt(item.quantity) || 1;
+                            const total = price * qty;
+                            calculatedSubtotal += total;
+                            
+                            const tr = document.createElement('tr');
+                            tr.style.borderBottom = '1px solid #eee';
+                            tr.innerHTML = `
+                                <td style="padding: 10px 0; color: #1a1a1a;">
+                                    <strong>${item.name || 'Product'}</strong><br>
+                                    <span style="font-size: 0.8rem; color: #666;">Size: ${item.size || 'Standard'} | Material: ${item.material || 'Standard'}</span>
+                                </td>
+                                <td style="padding: 10px 0; text-align: center; color: #1a1a1a;">${qty}</td>
+                                <td style="padding: 10px 0; text-align: right; color: #1a1a1a;">LKR ${price.toFixed(2)}</td>
+                                <td style="padding: 10px 0; text-align: right; color: #1a1a1a; font-weight: 600;">LKR ${total.toFixed(2)}</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                        
+                        const sub = parseFloat(details.subtotal) || calculatedSubtotal;
+                        const shipping = parseFloat(details.shippingCost) || 0;
+                        const grand = parseFloat(details.total) || (sub + shipping);
+                        
+                        const subtotalEl = document.getElementById('receipt-subtotal');
+                        if (subtotalEl) subtotalEl.innerText = 'LKR ' + sub.toFixed(2);
+
+                        const shippingEl = document.getElementById('receipt-shipping');
+                        if (shippingEl) shippingEl.innerText = shipping === 0 ? 'Free' : 'LKR ' + shipping.toFixed(2);
+
+                        const grandTotalEl = document.getElementById('receipt-grand-total');
+                        if (grandTotalEl) grandTotalEl.innerText = 'LKR ' + grand.toFixed(2);
+                    }
+                    
+                    const downloadBtn = document.getElementById('download-receipt-btn');
+                    if (downloadBtn) {
+                        const newBtn = downloadBtn.cloneNode(true);
+                        if (downloadBtn.parentNode) {
+                            downloadBtn.parentNode.replaceChild(newBtn, downloadBtn);
+                            
+                            newBtn.addEventListener('click', () => {
+                                if (typeof html2pdf === 'undefined') {
+                                    alert('PDF generation library is still loading or failed to load. Please check your internet connection.');
+                                    return;
+                                }
+                                const element = document.getElementById('receipt-container');
+                                if (!element) return;
+                                
+                                const opt = {
+                                    margin:       10,
+                                    filename:     `FandomVerse_Receipt_${details.orderId || 'Order'}.pdf`,
+                                    image:        { type: 'jpeg', quality: 0.98 },
+                                    html2canvas:  { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
+                                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                                };
+                                
+                                const oldShadow = element.style.boxShadow;
+                                element.style.boxShadow = 'none';
+                                
+                                html2pdf().set(opt).from(element).save().then(() => {
+                                    element.style.boxShadow = oldShadow;
+                                }).catch(err => {
+                                    console.error("FandomVerse: PDF generation failed:", err);
+                                    alert("Failed to generate PDF receipt. Please print or save this page directly.");
+                                });
+                            });
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error("FandomVerse: Critical error in initReceipt:", err);
+                const errorBanner = document.createElement('div');
+                errorBanner.style.color = 'red';
+                errorBanner.style.padding = '20px';
+                errorBanner.style.background = 'rgba(255,0,0,0.1)';
+                errorBanner.style.margin = '20px auto';
+                errorBanner.style.maxWidth = '600px';
+                errorBanner.style.borderRadius = '10px';
+                errorBanner.style.border = '1px solid rgba(255,0,0,0.2)';
+                errorBanner.innerText = 'Failed to load receipt: ' + err.message;
+                
+                const mainContainer = document.querySelector('main.container');
+                if (mainContainer) {
+                    mainContainer.appendChild(errorBanner);
+                } else {
+                    document.body.appendChild(errorBanner);
+                }
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initReceipt);
+        } else {
+            initReceipt();
+        }
+    </script>
 </body>
 
 </html>

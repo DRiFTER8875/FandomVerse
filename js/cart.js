@@ -65,7 +65,7 @@ function renderCart() {
         cartContainer.appendChild(cartRow);
     });
 
-    // calculate shipping cost
+    // standard shipping fee
     let hasDelivery = cart.some(item => item.delivery.includes('Delivery'));
     let shippingCost = hasDelivery ? 500.00 : 0.00;
 

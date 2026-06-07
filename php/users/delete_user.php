@@ -13,7 +13,7 @@ if ($id <= 0) {
     json_response(['success' => false, 'error' => 'Valid user ID is required.']);
 }
 
-// prevent self deletion
+// check that administrator is not deleting themselves
 if ($id === (int) $_SESSION['user']['id']) {
     json_response(['success' => false, 'error' => 'You cannot delete your own account.']);
 }

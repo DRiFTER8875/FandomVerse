@@ -10,7 +10,7 @@ if ($user['role'] === 'admin') {
     $result = $conn->query(
         'SELECT id, order_id AS orderId, customer_email AS email,
                 customer_name AS name, address, city,
-                items_json AS items, total, status,
+                items_json AS items, total, payment_method AS paymentMethod, status,
                 DATE_FORMAT(created_at, "%d %b %Y") AS date
          FROM orders
          ORDER BY created_at DESC'
@@ -20,7 +20,7 @@ if ($user['role'] === 'admin') {
     $stmt = $conn->prepare(
         'SELECT id, order_id AS orderId, customer_email AS email,
                 customer_name AS name, address, city,
-                items_json AS items, total, status,
+                items_json AS items, total, payment_method AS paymentMethod, status,
                 DATE_FORMAT(created_at, "%d %b %Y") AS date
          FROM orders
          WHERE customer_email = ?

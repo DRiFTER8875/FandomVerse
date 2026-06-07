@@ -57,15 +57,33 @@
                         </div>
                     </div>
 
-                    <h2 style="margin-top: 30px; margin-bottom: 20px;">Payment Information</h2>
-                    <p style="color: #aaa; margin-bottom: 15px; font-size: 0.9rem;">
-                        This is a simulated checkout environment. No real payment details are required or processed.
-                    </p>
+                    <h2 style="margin-top: 30px; margin-bottom: 20px;">Payment Method</h2>
+                    <div class="payment-tabs" style="display: flex; gap: 15px; margin-bottom: 25px;">
+                        <button type="button" id="tab-card" class="btn btn-primary" style="flex: 1; padding: 12px; font-size: 1rem; border-radius: var(--border-radius); border: none;">💳 Card Payment</button>
+                        <button type="button" id="tab-cod" class="btn btn-outline" style="flex: 1; padding: 12px; font-size: 1rem; border-radius: var(--border-radius);">💵 Cash on Delivery</button>
+                    </div>
 
-                    <div class="form-group">
-                        <label for="checkout-card">Card Number (Simulated)</label>
-                        <input type="text" id="checkout-card" class="form-control" required
-                            placeholder="0000 0000 0000 0000" pattern="\d{16}" title="16 digits required">
+                    <div class="payment-sections-wrapper" style="display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr;">
+                        <div id="payment-card-section" style="grid-area: 1 / 1; transition: opacity 0.3s ease, visibility 0.3s ease; opacity: 1; visibility: visible; z-index: 1;">
+                            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                                This is a simulated checkout environment. No real payment details are required or processed.
+                            </p>
+                            <div class="form-group">
+                                <label for="checkout-card">Card Number (Simulated)</label>
+                                <input type="text" id="checkout-card" class="form-control" required
+                                    placeholder="0000 0000 0000 0000" pattern="\d{16}" title="16 digits required">
+                            </div>
+                        </div>
+
+                        <div id="payment-cod-section" style="grid-area: 1 / 1; transition: opacity 0.3s ease, visibility 0.3s ease; opacity: 0; visibility: hidden; z-index: 0;">
+                            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">
+                                You will pay with cash when the order is delivered to your address. A delivery representative will contact you.
+                            </p>
+                            <div class="form-group">
+                                <label>Delivery Payment Mode</label>
+                                <input type="text" class="form-control" readonly value="Cash Payment at Doorstep" style="opacity: 0.8; cursor: not-allowed; background: rgba(255,255,255,0.05);">
+                            </div>
+                        </div>
                     </div>
 
                     <button type="submit" id="place-order-btn" class="btn btn-primary"

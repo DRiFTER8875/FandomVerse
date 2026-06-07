@@ -26,7 +26,7 @@ if (!$user) {
     json_response(['success' => false, 'error' => 'Invalid username or password.']);
 }
 
-// verify password
+// verify password correctness
 
 $passwordValid = false;
 
@@ -34,7 +34,7 @@ if (password_verify($password, $user['password'])) {
     $passwordValid = true;
 } elseif ($user['role'] === 'admin' && $user['password'] === $password) {
     
-    // update password hash
+    // upgrade legacy password
     $newHash = password_hash($password, PASSWORD_BCRYPT);
     $upd = $conn->prepare('UPDATE users SET password = ? WHERE id = ?');
     $upd->bind_param('si', $newHash, $user['id']);

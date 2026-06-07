@@ -15,7 +15,12 @@ if ($conn->connect_error) {
 
 $conn->set_charset('utf8mb4');
 
-// send response
+$check = $conn->query("SHOW COLUMNS FROM orders LIKE 'payment_method'");
+if ($check && $check->num_rows == 0) {
+    $conn->query("ALTER TABLE orders ADD COLUMN payment_method VARCHAR(50) NOT NULL DEFAULT 'Card'");
+}
+
+// helper to send JSON response
 function json_response($data, $status = 200)
 {
     http_response_code($status);
@@ -24,7 +29,7 @@ function json_response($data, $status = 200)
     exit();
 }
 
-// require admin
+// check if user is admin
 function require_admin()
 {
     if (session_status() === PHP_SESSION_NONE)
@@ -34,7 +39,7 @@ function require_admin()
     }
 }
 
-// require login
+// check if user is logged in
 function require_login()
 {
     if (session_status() === PHP_SESSION_NONE)

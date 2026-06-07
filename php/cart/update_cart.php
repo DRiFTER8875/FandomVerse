@@ -19,7 +19,7 @@ if (empty($productId)) {
     json_response(['success' => false, 'error' => 'Product ID is required.']);
 }
 
-// save cart item
+// insert or update cart entry
 $stmt = $conn->prepare(
     'INSERT INTO cart (user_id, product_id, quantity, size, material, delivery)
      VALUES (?, ?, ?, ?, ?, ?)

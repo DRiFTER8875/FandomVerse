@@ -249,15 +249,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (match) {
                     const domId = match[1];
                     const existsInStore = products.some(p => p.id === domId);
-                    if (!existsInStore) {
-                        card.remove(); // The admin deleted it!
-                    }
+                     if (!existsInStore) {
+                         card.remove(); // remove deleted item
+                     }
                 }
             }
         });
 
-        // 2. Append NEW products that belong in this container but aren't in the DOM yet
-        filteredProducts.forEach(product => {
+         // append new products
+         filteredProducts.forEach(product => {
             
             const alreadyInDOM = Array.from(container.querySelectorAll('.product-card')).some(card => {
                 const attr = card.getAttribute('onclick') || '';
