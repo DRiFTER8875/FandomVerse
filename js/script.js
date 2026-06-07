@@ -117,16 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
             window._fandomProducts = products;
         }
 
-        // Dummy block to satisfy old code path that used initialProducts = [
-          {
-                    id: "prod_1",
-                    name: "Gojo Figure",
-                    price: "3500.00",
-                    category: "Anime",
-                    subCategory: "Figure",
-                    image: "gojo figure.webp",
-                    stock: 15
-          },
           {
                     id: "prod_2",
                     name: "One Piece - Monkey D. Luffy Poster",
@@ -575,11 +565,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     category: "Movies",
                     subCategory: "Poster",
                     image: "https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=600&h=800&fit=crop&q=80",
-                    stock: 15
-          }
-];
-        // (end of dummy block — product data now comes from DB)
-        ];
+
 
         // --- RENDER after products loaded ---
         updateCartBadge();
