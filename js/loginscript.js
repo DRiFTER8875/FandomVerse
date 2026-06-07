@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* -------------------------------------------------------
-       VIEW TOGGLE LOGIC (Login <-> Signup panel)
-    ------------------------------------------------------- */
+    
     const loginContainer  = document.getElementById('loginContainer');
     const signupContainer = document.getElementById('signupContainer');
     const showSignupLink  = document.getElementById('showSignup');
@@ -23,9 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* -------------------------------------------------------
-       LOGIN LOGIC — PHP backend
-    ------------------------------------------------------- */
+    
     const loginBtn           = document.getElementById('loginBtn');
     const loginUsernameInput = document.getElementById('loginUsername');
     const loginPasswordInput = document.getElementById('loginPassword');
@@ -52,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await res.json();
 
                 if (data.success) {
-                    // Store minimal user info for UI (session is the auth source of truth)
+                    
                     localStorage.setItem('currentUser', JSON.stringify(data.user));
                     window.location.href = data.redirectTo;
                 } else {
@@ -68,9 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* -------------------------------------------------------
-       SIGNUP LOGIC — PHP backend
-    ------------------------------------------------------- */
+    
     const signupBtn = document.getElementById('signupBtn');
 
     if (signupBtn) {
@@ -82,13 +76,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const password        = document.getElementById('regPassword').value.trim();
             const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-            // Clear previous error messages
+            
             document.querySelectorAll('.error-msg').forEach(el => {
                 el.style.display = 'none';
                 el.innerText = '';
             });
 
-            // Client-side pre-validation
+            
             let localValid = true;
             if (username.length < 5 || username.length > 15) {
                 showError('usernameError', 'Username must be 5-15 characters');
@@ -154,17 +148,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* -------------------------------------------------------
-       HELPER: show field error
-    ------------------------------------------------------- */
+    
     function showError(elementId, message) {
         const el = document.getElementById(elementId);
         if (el) { el.innerText = message; el.style.display = 'block'; }
     }
 
-    /* -------------------------------------------------------
-       GOOGLE & GUEST BUTTONS
-    ------------------------------------------------------- */
+    
     const googleBtn = document.getElementById('googleBtn');
     if (googleBtn) {
         googleBtn.addEventListener('click', () => {
@@ -180,9 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* -------------------------------------------------------
-       SLIDER LOGIC
-    ------------------------------------------------------- */
+    
     const slides = document.querySelectorAll(".side-slide");
     if (slides.length > 0) {
         let currentSlide = 0;

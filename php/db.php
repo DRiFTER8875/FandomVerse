@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 
 $conn->set_charset('utf8mb4');
 
-// Helper: send JSON response and exit
+// send response
 function json_response($data, $status = 200)
 {
     http_response_code($status);
@@ -24,7 +24,7 @@ function json_response($data, $status = 200)
     exit();
 }
 
-// Helper: require admin session
+// require admin
 function require_admin()
 {
     if (session_status() === PHP_SESSION_NONE)
@@ -34,7 +34,7 @@ function require_admin()
     }
 }
 
-// Helper: require any logged-in user
+// require login
 function require_login()
 {
     if (session_status() === PHP_SESSION_NONE)

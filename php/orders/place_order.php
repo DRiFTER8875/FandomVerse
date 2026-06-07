@@ -18,7 +18,7 @@ if (!$name || !$email || !$address || !$city || !$itemsJson) {
     json_response(['success' => false, 'error' => 'All order fields are required.']);
 }
 
-// Validate items JSON
+// validate items
 $items = json_decode($itemsJson, true);
 if (!is_array($items) || empty($items)) {
     json_response(['success' => false, 'error' => 'Cart is empty or invalid.']);
@@ -34,7 +34,7 @@ $stmt = $conn->prepare(
 $stmt->bind_param('ssssssd', $orderId, $email, $name, $address, $city, $itemsJson, $totalFloat);
 
 if ($stmt->execute()) {
-    // If user is logged in, clear their DB cart too
+    // clear DB cart
     if (isset($_SESSION['user'])) {
         $userId = $_SESSION['user']['id'];
         $clearStmt = $conn->prepare('DELETE FROM cart WHERE user_id = ?');

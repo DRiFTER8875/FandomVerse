@@ -19,7 +19,7 @@ if (empty($productId)) {
     json_response(['success' => false, 'error' => 'Product ID is required.']);
 }
 
-// INSERT or UPDATE quantity on duplicate (same user + product + size + material)
+// save cart item
 $stmt = $conn->prepare(
     'INSERT INTO cart (user_id, product_id, quantity, size, material, delivery)
      VALUES (?, ?, ?, ?, ?, ?)

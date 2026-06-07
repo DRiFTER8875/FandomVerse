@@ -1,8 +1,5 @@
 <?php
-// ============================================================
-// FandomVerse — Update Profile Handler
-// POST: email (new), password (new, optional)
-// ============================================================
+
 session_start();
 header('Content-Type: application/json');
 require_once '../db.php';
@@ -28,7 +25,6 @@ if (!empty($errors)) {
     json_response(['success' => false, 'errors' => $errors]);
 }
 
-// Build dynamic UPDATE
 $setParts = [];
 $types    = '';
 $params   = [];

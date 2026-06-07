@@ -17,7 +17,7 @@ if (!$result) {
 
 $products = [];
 while ($row = $result->fetch_assoc()) {
-    // Cast types to match what JS expects
+    
     $row['price'] = (float) $row['price'];
     $row['isLimited'] = (bool) $row['isLimited'];
     $row['isPopular'] = (bool) $row['isPopular'];

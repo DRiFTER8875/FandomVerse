@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // --- 0. INJECT SIDEBAR & HAMBURGER ---
+    
     const header = document.querySelector('header');
     if (header && !document.querySelector('.hamburger')) {
         const hamburger = document.createElement('div');
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.addEventListener('click', closeSidebar);
     }
 
-    // --- 0b. INJECT SEARCH BAR ---
+    
     if (header && !document.getElementById('global-search-bar')) {
         const searchBar = document.createElement('div');
         searchBar.id = 'global-search-bar';
@@ -89,17 +89,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
-    // --- 2. CHECK LOGIN STATUS (PHP session) ---
+    
     checkLoginStatus();
 
-    // --- 2.5 LOAD PRODUCTS FROM PHP/MYSQL ---
-    // We fetch from the PHP API; while loading we show a placeholder.
-    // window._fandomProducts is used as the in-memory cache for search/render.
+    
+    
+    
     let products = [];
     window._fandomProducts = [];
 
-    // Kick off product fetch immediately (async), then render
+    
     (async () => {
         try {
             const res  = await fetch('php/products/get_products.php');
@@ -107,20 +106,19 @@ document.addEventListener("DOMContentLoaded", () => {
             if (data.success && Array.isArray(data.products)) {
                 products = data.products;
                 window._fandomProducts = products;
-                // Also mirror to localStorage for pages that still read it
+                
                 localStorage.setItem('fandomProducts', JSON.stringify(products));
             }
         } catch (err) {
             console.warn('PHP API unavailable, falling back to localStorage:', err);
-            // Graceful fallback: use whatever is in localStorage
+            
             products = JSON.parse(localStorage.getItem('fandomProducts')) || [];
             window._fandomProducts = products;
         }
 
-// --- RENDER after products loaded ---
         updateCartBadge();
 
-        // --- DYNAMIC MOST POPULAR (only items flagged by admin) ---
+        
         const popularTrack = document.getElementById('popular-track');
         if (popularTrack) {
             const popularItems = products.filter(p => p.isPopular === true);
@@ -154,23 +152,23 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Render index.html newest arrivals track
+        
         renderProductsToContainer('new-arrivals-track', null, null, true);
         applySmartScroll(document.getElementById('new-arrivals-track'));
         applySmartScroll(document.getElementById('popular-track'));
 
-        // Render Explore.html categories
+        
         renderProductsToContainer('slider-new-arrivals', null, 25, false);
         renderProductsToContainer('slider-anime',   p => p.category === 'Anime', null, false);
         renderProductsToContainer('slider-games',   p => p.category === 'Games', null, false);
         renderProductsToContainer('slider-cartoon', p => p.category === 'Cartoons' || p.category === 'Cartoon', null, false);
         renderProductsToContainer('slider-movies',  p => p.category === 'Movies/TV Series' || p.category === 'Movies' || p.category === 'Movies & TV Shows' || p.category === 'TV Shows', null, false);
-    })(); // end async IIFE
+    })(); 
 
     
 
-    // --- 3. DYNAMIC PRODUCTS GENERATION ---
-    // Reusable function to render products into a specific container
+    
+    
     const renderProductsToContainer = (containerId, filterFn, maxItems = null, duplicateForScroll = false) => {
         const container = document.getElementById(containerId);
         if (!container) return;
@@ -180,8 +178,8 @@ document.addEventListener("DOMContentLoaded", () => {
             filteredProducts = products.filter(filterFn);
         }
         
-        // Sort by dateAdded descending: admin-added items appear first.
-        // Legacy products without dateAdded fall to the end (treated as timestamp 0).
+        
+        
         filteredProducts = [...filteredProducts].sort((a, b) => (b.dateAdded || 0) - (a.dateAdded || 0));
 
         if (maxItems) {
@@ -217,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
             container.innerHTML = '';
             const originalCards = filteredProducts.map(createCardHTML).join('');
             container.innerHTML = originalCards;
-            // Add clones for infinite marquee (marked so we can remove them if not needed)
+            
             if (duplicateForScroll && filteredProducts.length > 0) {
                 filteredProducts.forEach(product => {
                     const clone = document.createElement('div');
@@ -228,12 +226,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
 
-            // Fix speed: compute duration from actual pixel width so px/s is constant
+            
             if (containerId === 'new-arrivals-track' || containerId === 'popular-track') {
                 requestAnimationFrame(() => {
-                    const PIXELS_PER_SECOND = 120; // constant scroll speed
-                    const halfWidth = container.scrollWidth / 2; // width of one set
-                    const duration = Math.max(halfWidth / PIXELS_PER_SECOND, 5); // min 5s
+                    const PIXELS_PER_SECOND = 120; 
+                    const halfWidth = container.scrollWidth / 2; 
+                    const duration = Math.max(halfWidth / PIXELS_PER_SECOND, 5); 
                     container.style.animationDuration = duration + 's';
                 });
             }
@@ -241,8 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // --- SMART DOM SYNC (Preserves Hardcoded HTML) ---
-        // 1. Remove DOM cards whose products were deleted from the store
+        
+        
         const existingCardsDOM = container.querySelectorAll('.product-card');
         existingCardsDOM.forEach(card => {
             const onclickAttr = card.getAttribute('onclick');
@@ -260,18 +258,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 2. Append NEW products that belong in this container but aren't in the DOM yet
         filteredProducts.forEach(product => {
-            // Avoid selecting by unescaped attributes, use more permissive check
+            
             const alreadyInDOM = Array.from(container.querySelectorAll('.product-card')).some(card => {
                 const attr = card.getAttribute('onclick') || '';
                 return attr.includes(`id=${product.id}'`) || attr.includes(`id=${product.id}"`);
             });
             if (!alreadyInDOM && product.id) {
-                container.insertAdjacentHTML('afterbegin', createCardHTML(product)); // Add new items to the front
+                container.insertAdjacentHTML('afterbegin', createCardHTML(product)); 
             }
         });
     };
 
-    // --- DYNAMIC MOST POPULAR (only items flagged by admin) ---
+    
     const popularTrack = document.getElementById('popular-track');
     if (popularTrack) {
         const popularItems = products.filter(p => p.isPopular === true);
@@ -294,9 +292,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `;
             };
-            // Add originals
+            
             popularTrack.innerHTML = popularItems.map(createPopCardHTML).join('');
-            // Add clones marked for removal if items fit on screen
+            
             popularItems.forEach(product => {
                 const clone = document.createElement('div');
                 clone.innerHTML = createPopCardHTML(product);
@@ -307,24 +305,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- SMART SCROLL: stop animation if items fit on screen ---
+    
     const applySmartScroll = (trackEl) => {
         if (!trackEl) return;
         requestAnimationFrame(() => {
             const wrapper = trackEl.closest('.slider-wrapper');
             const wrapperWidth = wrapper ? wrapper.offsetWidth : window.innerWidth;
-            // Measure only original (non-clone) cards
+            
             const originals = trackEl.querySelectorAll('.product-card:not([data-clone])');
             let originalsWidth = 0;
-            originals.forEach(c => { originalsWidth += c.offsetWidth + 32; }); // 32 = 2rem gap
+            originals.forEach(c => { originalsWidth += c.offsetWidth + 32; }); 
             if (originalsWidth <= wrapperWidth) {
-                // Items fit — remove clones, center, disable animation
+                
                 trackEl.querySelectorAll('[data-clone]').forEach(c => c.remove());
                 trackEl.style.animationName = 'none';
                 trackEl.style.justifyContent = 'center';
                 trackEl.style.width = 'auto';
             } else {
-                // Items overflow — keep clones, enable constant-speed marquee
+                
                 trackEl.style.animationName = '';
                 trackEl.style.justifyContent = '';
                 trackEl.style.width = '';
@@ -336,10 +334,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    // (Rendering now happens inside the async IIFE above after products are fetched)
+    
 });
 
-// --- HELPER FUNCTION: UPDATE CART BADGE ---
 function updateCartBadge() {
     const cartCount = document.getElementById('cart-count');
     if (cartCount) {
@@ -354,23 +351,22 @@ function updateCartBadge() {
     }
 }
 
-// --- CHECK LOGIN (PHP session-aware) ---
 function checkLoginStatus() {
-    // First try the PHP session (primary source of truth)
+    
     fetch('php/auth/check_session.php')
         .then(r => r.json())
         .then(data => {
             if (data.loggedIn && data.user) {
-                // Sync minimal info to localStorage for offline-UI use
+                
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
                 _applyLoginUI(data.user);
             } else {
-                // PHP says not logged in — also clear localStorage
+                
                 localStorage.removeItem('currentUser');
             }
         })
         .catch(() => {
-            // Fallback: PHP not available (e.g. opened as file://)
+            
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             if (currentUser && currentUser.name) _applyLoginUI(currentUser);
         });
@@ -387,7 +383,7 @@ function _applyLoginUI(user) {
         adminLink.style.display = 'inline';
     }
 
-    // Avoid duplicate welcome messages
+    
     if (document.getElementById('nav-welcome-msg')) return;
 
     const welcomeMsg = document.createElement('a');
@@ -403,10 +399,9 @@ function _applyLoginUI(user) {
     if (sidebarProfile) sidebarProfile.style.display = 'block';
 }
 
-// --- GLOBAL STORE FOR EXISTING EXPLORE PAGE ---
 window.store = {
     addToCart: function (productId) {
-        // Use in-memory cache first, then localStorage fallback
+        
         const products = window._fandomProducts && window._fandomProducts.length > 0
             ? window._fandomProducts
             : (JSON.parse(localStorage.getItem('fandomProducts')) || []);
@@ -430,7 +425,7 @@ window.store = {
             quantity: 1
         };
 
-        // Always update localStorage cart (works for guests too)
+        
         let cart = JSON.parse(localStorage.getItem('fandomCart')) || [];
         const existingItemIndex = cart.findIndex(item =>
             item.productId === cartItem.productId &&
@@ -446,7 +441,7 @@ window.store = {
         }
         localStorage.setItem('fandomCart', JSON.stringify(cart));
 
-        // If user is logged in, also sync to DB
+        
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (currentUser && currentUser.id) {
             const fd = new FormData();
@@ -463,8 +458,6 @@ window.store = {
     }
 };
 
-
-// --- SEARCH LOGIC ---
 function doSearch(query) {
     const overlay = document.getElementById('search-results-overlay');
     if (!query || query.length < 2) {
@@ -472,12 +465,12 @@ function doSearch(query) {
         return;
     }
 
-    // Use in-memory cache (populated by PHP fetch) or localStorage fallback
+    
     const products = window._fandomProducts && window._fandomProducts.length > 0
         ? window._fandomProducts
         : (JSON.parse(localStorage.getItem('fandomProducts')) || []);
 
-    // Search in name, category, and keywords
+    
     const results = products.filter(p => {
         const source = (p.name + " " + p.category + " " + (p.keywords || "")).toLowerCase();
         return source.includes(query.toLowerCase());

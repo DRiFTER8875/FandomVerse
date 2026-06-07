@@ -1,8 +1,5 @@
 <?php
-// ============================================================
-// FandomVerse — Check Session Handler
-// Called on every page load to restore UI login state
-// ============================================================
+
 session_start();
 header('Content-Type: application/json');
 

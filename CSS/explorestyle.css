@@ -1,4 +1,4 @@
-/* --- GLOBAL RESET --- */
+
 * {
     margin: 0;
     padding: 0;
@@ -13,11 +13,10 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: #111; /* Dark theme for explore page */
+  background-color: #111; 
   color: white;
 }
 
-/* --- FIXED WHITE NAVBAR (COPIED FROM STYLE.CSS) --- */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -54,7 +53,7 @@ nav a {
     text-decoration: none;
     color: black;
     margin-right: 20px;
-    font-weight: bold; /* Bold Letters */
+    font-weight: bold; 
     font-size: 15px;
     transition: color 0.3s;
 }
@@ -70,7 +69,7 @@ nav a:hover {
     border-radius: 12px;
     padding: 10px 0;
     min-width: 220px;
-    background-color: white; /* Solid White */
+    background-color: white; 
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);
@@ -120,7 +119,6 @@ nav a:hover {
     cursor: pointer;
 }
 
-/* --- MAIN CONTENT --- */
 main {
   padding: 30px;
 }
@@ -129,7 +127,6 @@ main {
   margin-bottom: 50px;
 }
 
-/* Flexbox to align Title and Button */
 .category-header {
     display: flex;
     align-items: center;
@@ -142,7 +139,6 @@ main {
   color: white;
 }
 
-/* "Show All" Button Style */
 .toggle-btn {
     background-color: #6a5cff;
     color: white;
@@ -159,11 +155,10 @@ main {
     color: black;
 }
 
-/* Grid Layout */
 .image-grid {
   display: flex;
   gap: 30px;
-  flex-wrap: wrap; /* Allows items to wrap when "Show All" is clicked */
+  flex-wrap: wrap; 
   justify-content: center;
 }
 
@@ -193,7 +188,6 @@ main {
     transform: scale(1.05);
 }
 
-/* Animation for adding items */
 .slide-in {
     animation: fadeIn 0.5s ease-in-out;
 }

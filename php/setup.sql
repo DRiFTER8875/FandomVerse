@@ -1,14 +1,7 @@
--- ============================================================
--- FandomVerse Database Setup
--- Run this ONCE in phpMyAdmin > SQL tab
--- ============================================================
 
 CREATE DATABASE IF NOT EXISTS fandomverse_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE fandomverse_db;
 
--- ============================================================
--- USERS TABLE
--- ============================================================
 CREATE TABLE IF NOT EXISTS users (
     id          INT AUTO_INCREMENT PRIMARY KEY,
     first_name  VARCHAR(50)  NOT NULL,
@@ -25,9 +18,6 @@ CREATE TABLE IF NOT EXISTS users (
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- ============================================================
--- PRODUCTS TABLE
--- ============================================================
 CREATE TABLE IF NOT EXISTS products (
     id           VARCHAR(30)    PRIMARY KEY,
     name         VARCHAR(255)   NOT NULL,
@@ -42,9 +32,6 @@ CREATE TABLE IF NOT EXISTS products (
     date_added   TIMESTAMP      DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- ============================================================
--- ORDERS TABLE
--- ============================================================
 CREATE TABLE IF NOT EXISTS orders (
     id             INT AUTO_INCREMENT PRIMARY KEY,
     order_id       VARCHAR(50)    NOT NULL UNIQUE,
@@ -58,9 +45,6 @@ CREATE TABLE IF NOT EXISTS orders (
     created_at     TIMESTAMP      DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- ============================================================
--- CART TABLE
--- ============================================================
 CREATE TABLE IF NOT EXISTS cart (
     id          INT AUTO_INCREMENT PRIMARY KEY,
     user_id     INT          NOT NULL,
@@ -74,22 +58,10 @@ CREATE TABLE IF NOT EXISTS cart (
     UNIQUE KEY unique_cart_item (user_id, product_id, size, material)
 ) ENGINE=InnoDB;
 
--- ============================================================
--- SEED: ADMIN USERS (passwords are hashed versions of the originals)
--- admin123 and admin456 — pre-hashed below (bcrypt cost 10)
--- You can regenerate with: echo password_hash('admin123', PASSWORD_BCRYPT);
--- ============================================================
 INSERT IGNORE INTO users (first_name, last_name, username, email, password, role) VALUES
 ('Drifter', 'Admin', 'admin',  'admin.drifter@fandomverse.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
 ('Ryzlo',   'Admin', 'admin2', 'admin.ryzlo@fandomverse.com',   '$2y$10$TKh8H1.PkR6m3fRuoNhqUuFpUjWQzNg2yYHEcv4vE2I1F4HNEZJK6', 'admin');
--- Note: The hashes above are placeholders. The login.php will also accept
--- the plaintext check for admins, OR run the hash generator below in phpMyAdmin:
--- SELECT PASSWORD('admin123'); -- not bcrypt, use PHP instead
--- Best: after setup, visit php/auth/generate_admin_hash.php once to update them.
 
--- ============================================================
--- SEED: ALL 51 PRODUCTS (from original script.js)
--- ============================================================
 INSERT IGNORE INTO products (id, name, price, category, sub_category, image, keywords, is_limited, is_popular, stock) VALUES
 ('prod1',  'Gojo Figure',                                    3500.00, 'Anime',           'Figure',  'gojo figure.webp',         'figure, anime, gojo, jjk',         0, 0, 15),
 ('prod2',  'One Piece - Monkey D. Luffy Poster',             2400.00, 'Anime',           'Poster',  'luffy.png',                'poster, anime, luffy, one piece',   0, 0, 15),

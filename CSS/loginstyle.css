@@ -1,4 +1,4 @@
-/* --- GLOBAL RESET --- */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -14,7 +14,6 @@ body {
     background-color: #111; 
 }
 
-/* --- 1. STATIC BACKGROUND IMAGE --- */
 .bg-static-image {
     position: fixed;
     top: 0;
@@ -34,7 +33,6 @@ body {
     z-index: -1;
 }
 
-/* --- 2. MAIN SPLIT WRAPPER --- */
 :root {
     --primary-color: #8A2BE2;
     --primary-hover: #9b4dff;
@@ -45,7 +43,7 @@ body {
     display: flex; 
     width: 900px; 
     max-width: 95vw; 
-    min-height: 620px; /* Increased to fit the signup form */
+    min-height: 620px; 
     background: linear-gradient(135deg, rgba(138, 43, 226, 0.1) 0%, rgba(255, 0, 85, 0.1) 100%);
     border-radius: 20px; 
     overflow: hidden; 
@@ -54,7 +52,6 @@ body {
     z-index: 1;
 }
 
-/* --- LEFT SIDE: SLIDER --- */
 .left-side-slider {
     flex: 1; 
     position: relative;
@@ -81,7 +78,6 @@ body {
     z-index: 2;
 }
 
-/* --- RIGHT SIDE: FORM --- */
 .right-side-form {
     flex: 1; 
     padding: 3rem; 
@@ -126,7 +122,6 @@ input:focus {
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* --- BUTTONS --- */
 button {
     width: 100%;
     padding: 12px;
@@ -160,7 +155,7 @@ button {
 }
 
 .social-btn::before {
-    content: "G"; /* Simple placeholder for Google Icon */
+    content: "G"; 
     font-weight: bold;
     color: #4285F4;
     font-size: 1.2rem;
@@ -181,7 +176,6 @@ button {
     color: white;
 }
 
-/* --- DIVIDER & TEXT --- */
 .divider {
     display: flex;
     align-items: center;

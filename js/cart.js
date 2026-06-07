@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // We will render the cart logic here
+    
     renderCart();
 });
 
@@ -8,7 +8,7 @@ function renderCart() {
     const emptyMessage = document.getElementById('empty-cart-message');
     const orderSummary = document.getElementById('order-summary');
 
-    // Get cart from localStorage
+    
     let cart = JSON.parse(localStorage.getItem('fandomCart')) || [];
 
     if (cart.length === 0) {
@@ -26,7 +26,7 @@ function renderCart() {
     let subtotal = 0;
 
     cart.forEach(item => {
-        // Safe defaults if empty
+        
         const itemPrice = parseFloat(item.price) || 0;
         const itemQuantity = parseInt(item.quantity) || 1;
         const lineTotal = itemPrice * itemQuantity;
@@ -65,7 +65,7 @@ function renderCart() {
         cartContainer.appendChild(cartRow);
     });
 
-    // Calculate generic shipping cost: 500 flat rate if there are items, but let's say 0 for Store Pickup
+    // calculate shipping cost
     let hasDelivery = cart.some(item => item.delivery.includes('Delivery'));
     let shippingCost = hasDelivery ? 500.00 : 0.00;
 
@@ -84,7 +84,7 @@ window.updateQuantity = function (cartItemId, change) {
         localStorage.setItem('fandomCart', JSON.stringify(cart));
         renderCart();
 
-        // Try calling global updateCartBadge if it exists on the page
+        
         if (typeof updateCartBadge === 'function') {
             updateCartBadge();
         }

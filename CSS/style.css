@@ -2,10 +2,10 @@
 
 :root {
     --primary-color: #8A2BE2;
-    /* Vivid Purple */
+    
     --primary-hover: #9b4dff;
     --secondary-color: #FF0055;
-    /* Neon Pink/Red */
+    
     --bg-color: #050505;
     --surface-color: #111111;
     --surface-glass: rgba(255, 255, 255, 0.05);
@@ -62,7 +62,6 @@ button {
     outline: none;
 }
 
-/* Glassmorphism Classes */
 .glass {
     background: var(--surface-glass);
     backdrop-filter: blur(12px);
@@ -76,7 +75,6 @@ button {
     box-shadow: var(--shadow);
 }
 
-/* Header */
 header {
     position: sticky;
     top: 0;
@@ -166,7 +164,6 @@ header {
     padding: 0 4px;
 }
 
-/* Buttons */
 .btn {
     display: inline-block;
     padding: 0.8rem 1.8rem;
@@ -197,7 +194,6 @@ header {
     color: var(--primary-color);
 }
 
-/* Container */
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -205,7 +201,6 @@ header {
     flex: 1;
 }
 
-/* Product Grid */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -213,7 +208,6 @@ header {
     margin-top: 2rem;
 }
 
-/* Product Card */
 .product-card {
     border-radius: var(--border-radius);
     overflow: hidden;
@@ -305,7 +299,6 @@ header {
     border-color: var(--primary-color);
 }
 
-/* Form Styles */
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -334,7 +327,6 @@ header {
     background: rgba(255, 255, 255, 0.05);
 }
 
-/* Footer */
 footer {
     text-align: center;
     padding: 2rem;
@@ -343,7 +335,6 @@ footer {
     margin-top: auto;
 }
 
-/* ===== SEARCH BAR ===== */
 #global-search-bar {
     display: flex;
     align-items: center;
@@ -442,8 +433,6 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Responsive */
-/* Sidebar and Mobile Header */
 .hamburger {
     display: none;
     font-size: 1.8rem;
@@ -529,7 +518,7 @@ footer {
     .nav-icons {
         gap: 0.8rem;
     }
-    /* Hide desktop search bar, show mobile icon */
+    
     #global-search-bar {
         display: none;
         position: fixed;
@@ -550,14 +539,12 @@ footer {
     #mobile-search-icon {
         display: inline;
     }
-    /* Hide greeting on mobile */
+    
     .nav-welcome-msg {
         display: none !important;
     }
 }
 
-/* Home Page */
-/* Hero Section */
 .hero {
     position: relative;
     height: 80vh;
@@ -633,11 +620,10 @@ footer {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: none;
-    /* override inherited shadow to prevent darkening */
+    
     filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.7));
 }
 
-/* All Section Titles */
 .section-title {
     font-size: 2.5rem;
     margin-bottom: 2rem;
@@ -664,7 +650,6 @@ footer {
     text-align: center;
 }
 
-/* About Layout Block */
 .about-section {
     display: flex;
     align-items: center;
@@ -724,7 +709,6 @@ footer {
     transform: scale(1.05);
 }
 
-/* Contact Section */
 .contact-section {
     max-width: 1000px;
     margin: 0 auto 5rem auto;
@@ -755,7 +739,7 @@ footer {
     flex: 1;
     padding: 2.5rem;
     margin: 0;
-    /* Override generic glass margin */
+    
 }
 
 .contact-form-container textarea {
@@ -771,7 +755,6 @@ footer {
     }
 }
 
-/* Explore Page */
 .explore-header {
     text-align: center;
     margin-bottom: 3rem;
@@ -795,7 +778,6 @@ footer {
     color: white;
 }
 
-/* Slider Section */
 .slider-section {
     padding: 3rem 0;
     max-width: 100%;
@@ -807,7 +789,7 @@ footer {
     width: 100%;
     position: relative;
     padding: 1rem 0;
-    /* Add glowing edges fade out effect */
+    
     mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
 }
@@ -842,7 +824,6 @@ footer {
     }
 }
 
-/* Explore Category Slider */
 .category-section {
     position: relative;
     margin-bottom: 4rem;
@@ -866,7 +847,7 @@ footer {
 .category-slider .product-card {
     flex: 0 0 calc(20% - 1.2rem);
     min-width: 250px;
-    /* Fallback for very small screens */
+    
 }
 
 .slider-btn {
@@ -922,7 +903,7 @@ footer {
 
     .slider-btn {
         display: none;
-        /* Hide buttons on mobile, allow native touch scroll */
+        
     }
 
     .category-slider {
@@ -936,12 +917,12 @@ footer {
 }
 
 @media (max-width: 480px) {
-    /* Instagram suggested grid style: 2 items per screen */
+    
     .category-slider {
         gap: 0.8rem;
     }
     .slider-track {
-        gap: 0.8rem !important; /* Override inline gap for Trending track */
+        gap: 0.8rem !important; 
     }
     .category-slider .product-card {
         flex: 0 0 calc(50% - 0.4rem) !important;
@@ -949,7 +930,7 @@ footer {
         width: auto !important;
     }
     .slider-track .product-card {
-        flex: 0 0 calc(50vw - 2rem) !important; /* Use vw because slider-track is max-content */
+        flex: 0 0 calc(50vw - 2rem) !important; 
         min-width: 0 !important;
         width: auto !important;
     }

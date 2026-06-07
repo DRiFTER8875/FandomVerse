@@ -35,7 +35,7 @@ $stmt = $conn->prepare(
          image = ?, keywords = ?, is_limited = ?, is_popular = ?, stock = ?
      WHERE id = ?'
 );
-// s=name, d=price, s=category, s=subCategory, s=image, s=keywords, i=isLimited, i=isPopular, i=stock, s=id
+
 $stmt->bind_param('sdssssiiis', $name, $priceFloat, $category, $subCategory, $image, $keywords, $isLimited, $isPopular, $stock, $id);
 
 if ($stmt->execute()) {

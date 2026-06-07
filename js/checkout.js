@@ -84,9 +84,9 @@ async function placeOrder() {
         const data = await res.json();
 
         if (data.success) {
-            // Clear localStorage cart
+            
             localStorage.removeItem('fandomCart');
-            // Store orderId for success page
+            
             localStorage.setItem('lastOrderId', data.orderId);
             window.location.href = 'order_success.html';
         } else {
@@ -95,7 +95,7 @@ async function placeOrder() {
         }
     } catch (err) {
         console.warn('PHP order failed, saving to localStorage as fallback:', err);
-        // Fallback: save to localStorage (file:// mode)
+        
         const newOrder = {
             orderId:  'ORD-' + Math.floor(Math.random() * 1000000),
             date:     new Date().toLocaleDateString(),

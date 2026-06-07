@@ -1,9 +1,5 @@
 <?php
-// ============================================================
-// FandomVerse — Register / Signup Handler
-// POST: firstName, lastName, username, email, password,
-//       address, province, city, postalCode, phone
-// ============================================================
+
 session_start();
 header('Content-Type: application/json');
 require_once '../db.php';
@@ -12,7 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     json_response(['success' => false, 'error' => 'Method not allowed.'], 405);
 }
 
-// --- Collect & sanitize inputs ---
 $firstName  = trim($_POST['firstName']  ?? '');
 $lastName   = trim($_POST['lastName']   ?? '');
 $username   = trim($_POST['username']   ?? '');
@@ -25,7 +20,6 @@ $city       = trim($_POST['city']       ?? '');
 $postalCode = trim($_POST['postalCode'] ?? '');
 $phone      = trim($_POST['phone']      ?? '');
 
-// --- Server-side validation ---
 $errors = [];
 
 if (empty($firstName) || empty($lastName)) {
@@ -52,13 +46,13 @@ if (!empty($errors)) {
     json_response(['success' => false, 'errors' => $errors]);
 }
 
-// --- Check uniqueness (username + email) ---
+// check uniqueness
 $stmt = $conn->prepare('SELECT id FROM users WHERE username = ? OR email = ?');
 $stmt->bind_param('ss', $username, $email);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($row = $result->fetch_assoc()) {
-    // Figure out which one conflicts
+    
     $chkStmt = $conn->prepare('SELECT username, email FROM users WHERE username = ? OR email = ?');
     $chkStmt->bind_param('ss', $username, $email);
     $chkStmt->execute();
@@ -71,7 +65,6 @@ if ($row = $result->fetch_assoc()) {
 }
 $stmt->close();
 
-// --- Hash password & insert ---
 $hashed = password_hash($password, PASSWORD_BCRYPT);
 
 $insert = $conn->prepare(

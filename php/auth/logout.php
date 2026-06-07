@@ -1,7 +1,5 @@
 <?php
-// ============================================================
-// FandomVerse — Logout Handler
-// ============================================================
+
 session_start();
 header('Content-Type: application/json');
 

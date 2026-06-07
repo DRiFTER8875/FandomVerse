@@ -1,25 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. SETUP: Load existing data from DB ---
+    
     loadTableFromDB();
 
-    // --- SETUP ADMIN NAME from session ---
+    
     fetch('php/auth/check_session.php')
         .then(r => r.json())
         .then(data => {
             if (data.loggedIn && data.user) {
                 const adminNameEl = document.getElementById('displayAdminName');
                 if (adminNameEl) adminNameEl.innerText = 'Admin ' + data.user.name;
-                // Also update localStorage for other pages
+                
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
             } else {
-                // Not an admin session — redirect to login
+                
                 alert('Admin access required. Please log in.');
                 window.location.href = 'login.html';
             }
         })
         .catch(() => {
-            // Fallback: check localStorage (file:// mode)
+            
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             if (currentUser && currentUser.name) {
                 const adminNameEl = document.getElementById('displayAdminName');
@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-    // --- LOAD ACTUAL USERS ---
+    
     loadUsersFromDB();
 
-    // --- TAB SWITCHING LOGIC ---
+    
     const sidebarLinks    = document.querySelectorAll('.sidebar-link');
     const contentSections = document.querySelectorAll('.content-section');
 
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- "ADD / UPDATE ITEM" BUTTON LOGIC ---
+    
     const addItemBtn = document.getElementById('addItemBtn');
 
     if (addItemBtn) {
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- BULK DELETE LOGIC ---
+    
     const selectAllCheckbox = document.getElementById('selectAllItems');
     const bulkDeleteBtn     = document.getElementById('bulkDeleteBtn');
 
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const productIds = Array.from(checkboxes).map(cb => cb.value);
 
-            // Delete each one via PHP
+            
             const deletePromises = productIds.map(pid => {
                 const fd = new FormData();
                 fd.append('id', pid);
@@ -152,14 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// --- TOGGLE BULK DELETE BUTTON ---
 function toggleBulkDeleteBtn() {
     const checkedCount = document.querySelectorAll('.itemCheckbox:checked').length;
     const bulkBtn      = document.getElementById('bulkDeleteBtn');
     if (bulkBtn) bulkBtn.style.display = checkedCount > 0 ? 'inline-block' : 'none';
 }
 
-// --- LOAD PRODUCTS FROM DB INTO TABLE ---
 async function loadTableFromDB() {
     const tableBody = document.getElementById('itemsTableBody');
     if (!tableBody) return;
@@ -175,7 +173,7 @@ async function loadTableFromDB() {
         }
 
         const products = data.products;
-        // Mirror to localStorage for other JS pages
+        
         localStorage.setItem('fandomProducts', JSON.stringify(products));
 
         tableBody.innerHTML = '';
@@ -212,7 +210,6 @@ async function loadTableFromDB() {
     }
 }
 
-// --- CLEAR INPUTS ---
 function clearInputs() {
     document.getElementById('itemId').value        = '';
     document.getElementById('itemName').value      = '';
@@ -225,7 +222,6 @@ function clearInputs() {
     document.getElementById('itemSubCategory').selectedIndex = 0;
 }
 
-// --- REMOVE PRODUCT ---
 window.removeProduct = async function (productId) {
     if (!confirm('Are you sure you want to remove this item?')) return;
 
@@ -246,7 +242,6 @@ window.removeProduct = async function (productId) {
     }
 };
 
-// --- EDIT PRODUCT (pre-fill form from DB data) ---
 window.editProduct = async function (productId) {
     const products = JSON.parse(localStorage.getItem('fandomProducts')) || [];
     const product  = products.find(p => p.id === productId);
@@ -268,7 +263,7 @@ window.editProduct = async function (productId) {
     for (let opt of catSelect.options) { if (opt.value === product.category)    { opt.selected = true; break; } }
     for (let opt of subSelect.options) { if (opt.value === product.subCategory) { opt.selected = true; break; } }
 
-    // Store editing ID
+    
     document.getElementById('editIndexInput').value = productId;
     const addBtn = document.getElementById('addItemBtn');
     addBtn.textContent  = 'Update Item';
@@ -277,7 +272,6 @@ window.editProduct = async function (productId) {
     document.querySelector('.add-item-form').scrollIntoView({ behavior: 'smooth' });
 };
 
-// --- LOAD USERS FROM DB ---
 async function loadUsersFromDB() {
     const tableBody = document.getElementById('usersTableBody');
     if (!tableBody) return;
@@ -323,7 +317,6 @@ async function loadUsersFromDB() {
     }
 }
 
-// --- REMOVE USER ---
 window.removeUser = async function (userId) {
     if (!confirm('Are you sure you want to remove this user?')) return;
 

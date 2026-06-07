@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // --- 1. CHECK SESSION (PHP) ---
+    
     let userData = null;
 
     try {
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         localStorage.setItem('currentUser', JSON.stringify(userData));
 
     } catch (err) {
-        // Fallback to localStorage if PHP unavailable
+        
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (!currentUser || currentUser.role !== 'customer') {
             alert("Please log in to view your profile.");
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         userData = currentUser;
     }
 
-    // --- 2. DISPLAY PROFILE HEADER ---
+    
     const firstInitial = userData.name ? userData.name.charAt(0).toUpperCase() : '?';
     const dpEl = document.getElementById('profile-dp');
     if (dpEl) dpEl.innerText = firstInitial;
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const emailInput = document.getElementById('update-email');
     if (emailInput) emailInput.value = userData.email || '';
 
-    // --- 3. HANDLE UPDATE SUBMISSION ---
+    
     const updateForm = document.getElementById('update-form');
     if (updateForm) {
         updateForm.addEventListener('submit', async (e) => {
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (data.success) {
                     alert("Profile updated successfully!");
                     if (newEmail && emailEl) emailEl.innerText = newEmail;
-                    // Update localStorage cache
+                    
                     userData.email = newEmail || userData.email;
                     localStorage.setItem('currentUser', JSON.stringify(userData));
                     if (document.getElementById('update-password'))
@@ -77,19 +77,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // --- 4. LOGOUT ---
+    
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
             try {
                 await fetch('php/auth/logout.php');
-            } catch (_) { /* ignore */ }
+            } catch (_) {  }
             localStorage.removeItem('currentUser');
             window.location.href = 'index.html';
         });
     }
 
-    // --- 5. RENDER CART (from localStorage — works for guests too) ---
+    
     const cart          = JSON.parse(localStorage.getItem('fandomCart')) || [];
     const cartContainer = document.getElementById('profile-cart-container');
     if (cartContainer) {
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // --- 6. RENDER ORDERS (from PHP) ---
+    
     const ordersContainer = document.getElementById('profile-orders-container');
     if (ordersContainer) {
         ordersContainer.innerHTML = '<p style="color:#aaa;">Loading orders...</p>';
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 ordersContainer.innerHTML = ordersHtml;
             }
         } catch (err) {
-            // Fallback to localStorage orders
+            
             const orders     = JSON.parse(localStorage.getItem('fandomOrders')) || [];
             const userOrders = orders.filter(o => o.customer && o.customer.email === userData.email);
             if (userOrders.length === 0) {
