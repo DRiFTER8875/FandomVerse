@@ -33,8 +33,8 @@ $passwordValid = false;
 if (password_verify($password, $user['password'])) {
     $passwordValid = true;
 } elseif ($user['role'] === 'admin' && $user['password'] === $password) {
-    
-    // upgrade legacy password
+
+    // upgrade password
     $newHash = password_hash($password, PASSWORD_BCRYPT);
     $upd = $conn->prepare('UPDATE users SET password = ? WHERE id = ?');
     $upd->bind_param('si', $newHash, $user['id']);
@@ -48,18 +48,18 @@ if (!$passwordValid) {
 }
 
 $_SESSION['user'] = [
-    'id'       => $user['id'],
-    'name'     => $user['first_name'],
+    'id' => $user['id'],
+    'name' => $user['first_name'],
     'username' => $user['username'],
-    'email'    => $user['email'],
-    'role'     => $user['role'],
+    'email' => $user['email'],
+    'role' => $user['role'],
 ];
 
 $redirectTo = ($user['role'] === 'admin') ? 'admin_dashboard.html' : 'index.html';
 
 json_response([
-    'success'    => true,
-    'user'       => $_SESSION['user'],
+    'success' => true,
+    'user' => $_SESSION['user'],
     'redirectTo' => $redirectTo
 ]);
 
